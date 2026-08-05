@@ -1,0 +1,16 @@
+{
+  "name": "media-gallery",
+  "version": "1.0.0",
+  "description": "基于 Cloudflare Workers + D1 + R2 的媒体展示网站，支持图片、视频、文字展示及后台管理",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create media_gallery_db",
+    "db:migrate": "wrangler d1 migrations apply media_gallery_db",
+    "db:migrate:local": "wrangler d1 migrations apply media_gallery_db --local"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260101.0",
+    "wrangler": "^4.0.0"
+  }
+}
