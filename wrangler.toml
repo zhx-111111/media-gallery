@@ -1,0 +1,31 @@
+name = "media-gallery-worker"
+main = "src/worker.js"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 数据库绑定（存储元数据）
+[[d1_databases]]
+binding = "DB"
+database_name = "media_gallery_db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# R2 存储桶绑定（存储图片/视频文件）
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "media-gallery-bucket"
+
+# KV 命名空间绑定（存储管理员会话/缓存）
+[[kv_namespaces]]
+binding = "CACHE"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+[observability]
+enabled = true
+
+[vars]
+# 管理员密码（请修改为强密码）
+ADMIN_PASSWORD = "change-me-to-a-strong-password"
+# 站点名称
+SITE_NAME = "我的媒体画廊"
+# 每页展示数量
+PAGE_SIZE = "24"
