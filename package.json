@@ -1,7 +1,7 @@
 {
   "name": "media-gallery",
   "version": "1.0.0",
-  "description": "基于 Cloudflare Workers + D1 + R2 的媒体展示网站，支持图片、视频、文字展示及后台管理",
+  "description": "基于 Cloudflare Workers + D1 + KV 的媒体展示网站（Apple UI 风格），图片存 KV，删除联动释放存储",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",

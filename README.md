@@ -1,24 +1,26 @@
-# 🖼️ Media Gallery — Cloudflare 媒体展示网站
+# Media Gallery — Cloudflare 媒体展示网站
 
-基于 **Cloudflare Workers + D1 + R2 + KV** 的零成本媒体展示网站，支持图片、视频、文字的展示与管理。
+基于 **Cloudflare Workers + D1 + KV** 的零成本媒体展示网站，支持图片、视频、文字的展示与管理。
+
+> 🎨 **Apple 风格 UI** — 浅色毛玻璃、圆角卡片、SF 字体、柔和阴影、流畅动画
 
 ## ✨ 功能特性
 
 ### 前台展示
-- 🖼️ **图片展示** — 瀑布流网格布局，支持缩略图懒加载
-- 🎬 **视频播放** — 原生 HTML5 视频播放器
-- 📝 **文字内容** — 富文本展示，支持换行
+- 🖼️ **图片展示** — 响应式网格布局，懒加载，hover 浮起效果
+- 🎬 **视频播放** — 支持外链（YouTube / B站 / 任意 mp4 直链）
+- 📝 **文字内容** — 优雅排版，支持换行
 - 🔍 **搜索筛选** — 按类型、关键词实时搜索
-- 📱 **响应式设计** — 完美适配手机、平板、桌面
-- 🌙 **暗色主题** — 护眼暗色 UI，现代感十足
+- 📱 **全端适配** — 手机、平板、桌面完美呈现
+- 🍎 **Apple 风格** — 毛玻璃导航栏、圆角卡片、系统字体、柔和动效
 
 ### 后台管理
-- 🔐 **登录鉴权** — Cookie 会话管理，7天自动过期
-- ➕ **添加内容** — 支持图片/视频上传、文字编辑
+- 🔐 **登录鉴权** — Cookie 会话管理，7 天自动过期
+- ➕ **添加内容** — 图片上传到 KV / 视频填外链 / 文字直接编辑
 - ✏️ **编辑内容** — 修改标题、描述、标签、可见性等
-- 🗑️ **删除/批量删除** — 删除时自动清理 R2 文件
+- 🗑️ **删除联动释放** — 删除图片时**同步清除 KV 中的二进制数据**，彻底释放存储配额
 - 🏷️ **标签系统** — 逗号分隔的多标签管理
-- 📊 **统计面板** — 实时显示各类型内容数量
+- 📊 **统计面板** — 实时显示各类型数量 + 图片存储占用
 - 📤 **拖拽上传** — 支持拖拽 + 点击上传，带进度条
 - 🔒 **私有/公开** — 控制内容是否在前台展示
 
@@ -26,30 +28,31 @@
 
 ```
 ┌─────────────────────────────────────────────┐
-│          Cloudflare Pages (前端)           │
-│     纯静态 HTML/CSS/JS，零成本托管         │
-└──────────────────┬──────────────────────────┘
-                   │ API 调用
-                   ▼
-┌─────────────────────────────────────────────┐
-│         Cloudflare Worker (后端)            │
-│   路由分发 + 鉴权 + 业务逻辑 + 文件代理     │
-└──────┬──────────────┬──────────────┬────────┘
+│          Cloudflare Worker (全栈)          │
+│   API + 前台页面 + 后台管理（全部在一个 JS） │
+└──────┬──────────────┬──────────────┬───────┘
        │              │              │
        ▼              ▼              ▼
-┌──────────┐  ┌──────────┐  ┌──────────┐
-│  D1      │  │  R2      │  │  KV      │
-│  SQLite  │  │  对象存储 │  │  会话缓存 │
-│  元数据   │  │  媒体文件 │  │  登录态   │
-└──────────┘  └──────────┘  └──────────┘
+┌──────────┐  ┌──────────────┐  ┌──────────────┐
+│  D1      │  │  KV #1 MEDIA │  │  KV #2 CACHE │
+│  SQLite  │  │  图片二进制   │  │  会话/缓存   │
+│  元数据   │  │  ≤25MB/张   │  │  登录态       │
+└──────────┘  └──────────────┘  └──────────────┘
 ```
+
+### 存储分工
+| 内容类型 | 存储位置 | 说明 |
+|---------|---------|------|
+| 图片 | **KV (MEDIA_KV)** | 二进制直存，删除时 `KV.delete()` 彻底释放 |
+| 视频 | **外链 URL** | 存于 D1，仅记录地址，不占 CF 存储 |
+| 文字 | **D1** | 直接存文本内容 |
+| 元数据 | **D1** | 标题、描述、标签、排序等 |
 
 ## 🚀 部署指南
 
 ### 前置要求
 - Cloudflare 账户（免费版即可）
 - Node.js >= 18
-- npm 或 pnpm
 
 ### 第一步：创建 Cloudflare 资源
 
@@ -58,152 +61,161 @@
 cd media-gallery
 npx wrangler d1 create media_gallery_db
 ```
-记录输出的 `database_id`，填入 `wrangler.toml` 的 `database_id` 字段。
+记录输出的 `database_id`。
 
-#### 2. 创建 R2 存储桶
-```bash
-npx wrangler r2 bucket create media-gallery-bucket
-```
-
-#### 3. 创建 KV 命名空间
+#### 2. 创建 KV 命名空间（缓存/会话）
 ```bash
 npx wrangler kv namespace create CACHE
 ```
-记录输出的 ID，填入 `wrangler.toml` 的 KV `id` 字段。
 
-### 第二步：执行数据库迁移
-
+#### 3. 创建 KV 命名空间（图片存储）
 ```bash
-# 本地测试
-npx wrangler d1 migrations apply media_gallery_db --local
+npx wrangler kv namespace create MEDIA_KV
+```
 
-# 生产环境
+> 你需要**两个 KV 命名空间**：一个存会话缓存，一个存图片二进制。
+
+### 第二步：填写配置
+
+编辑 `wrangler.toml`，填入三个 ID：
+```toml
+[[d1_databases]]
+database_id = "你的 D1 ID"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "你的 KV #1 ID（会话缓存）"
+
+[[kv_namespaces]]
+binding = "MEDIA_KV"
+id = "你的 KV #2 ID（图片存储）"
+```
+
+### 第三步：执行数据库迁移
+```bash
 npx wrangler d1 migrations apply media_gallery_db
 ```
 
-### 第三步：修改配置
-
-编辑 `wrangler.toml`：
-- 将 `REPLACE_WITH_YOUR_D1_DATABASE_ID` 替换为实际的 D1 数据库 ID
-- 将 `REPLACE_WITH_YOUR_KV_NAMESPACE_ID` 替换为实际的 KV 命名空间 ID
-- 修改 `ADMIN_PASSWORD` 为你自己的强密码（或使用默认的 admin/admin123 登录后修改）
-
-> **默认管理员账号**: `admin` / `admin123`
-> 密码哈希在迁移文件中，建议部署后立即修改。
-
 ### 第四步：部署
-
 ```bash
-# 安装依赖
 npm install
-
-# 部署到 Cloudflare
 npm run deploy
 ```
 
-部署成功后，你会获得一个 `*.workers.dev` 的域名。
+部署成功后获得 `*.workers.dev` 域名。
 
 ### 第五步（可选）：绑定自定义域名
-
-在 Cloudflare Dashboard → Workers & Pages → 你的 Worker → 设置 → 触发器 → 自定义域，添加你的域名。
+Cloudflare Dashboard → Workers & Pages → 你的 Worker → 设置 → 触发器 → 自定义域
 
 ## 📂 项目结构
 
 ```
 media-gallery/
 ├── src/
-│   └── worker.js          # Worker 主文件（含所有 API + 前端页面）
+│   └── worker.js          # Worker 主文件（API + 前台 + 后台，Apple UI）
 ├── migrations/
-│   └── 0001_init.sql     # D1 数据库初始化 SQL
-├── wrangler.toml          # Cloudflare Worker 配置
-├── package.json           # 项目依赖
-└── README.md              # 本文件
+│   └── 0001_init.sql     # D1 建表 SQL
+├── wrangler.toml          # Cloudflare 配置（D1 + 2×KV，无 R2）
+├── package.json
+└── README.md
 ```
 
-## 🔌 API 接口文档
+## 🔌 API 接口
 
 ### 认证
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | `/api/login` | 管理员登录 |
-| POST | `/api/logout` | 退出登录 |
-| GET  | `/api/auth/check` | 检查登录状态 |
+| POST | `/api/logout` | 退出 |
+| GET  | `/api/auth/check` | 检查登录态 |
 
 ### 媒体内容
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET    | `/api/media?page=1&pageSize=24&type=image&search=关键词` | 列表查询 |
-| GET    | `/api/media/:id` | 获取单条详情 |
-| POST   | `/api/media` | 创建内容 |
-| PUT    | `/api/media/:id` | 更新内容 |
-| DELETE | `/api/media/:id` | 删除内容 |
-| POST   | `/api/media/batch-delete` | 批量删除 |
+| GET    | `/api/media?page=1&type=image&search=关键词` | 列表查询 |
+| GET    | `/api/media/:id` | 单条详情 |
+| POST   | `/api/media` | 创建 |
+| PUT    | `/api/media/:id` | 更新 |
+| DELETE | `/api/media/:id` | 删除（**联动清除 KV 图片**） |
+| POST   | `/api/media/batch-delete` | 批量删除（**联动清除 KV**） |
 
 ### 文件上传
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| POST | `/api/upload` | 上传文件到 R2（form-data，字段名 `file`） |
+| POST | `/api/upload` | 上传图片到 KV（≤24MB） |
 
 ### 文件代理
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET  | `/file/:key` | 从 R2 读取文件并代理返回 |
+| GET  | `/file/:key` | 从 KV 读取图片并返回 |
 
-## 💰 成本估算
+## 🗑️ 删除如何释放存储
 
-Cloudflare 免费额度完全够个人使用：
+后台删除图片时，系统执行**两步清除**：
 
-| 资源 | 免费额度 | 个人使用预估 |
-|------|---------|------------|
-| Workers | 10万次/天 | ✅ 绰绰有余 |
-| D1 | 5GB 存储 + 500万次读/月 | ✅ 足够 |
-| R2 | 10GB 存储 + 100万次 A 类操作 + 1000万次 B 类操作 | ✅ 足够 |
-| KV | 1GB 存储 | ✅ 足够 |
+```js
+// 1. 从 KV 彻底删除二进制数据 → 立即释放配额
+await env.MEDIA_KV.delete(item.content);
+// 2. 从 D1 删除元数据行
+await env.DB.prepare('DELETE FROM media_items WHERE id = ?').bind(id).run();
+```
 
-> **核心优势**：R2 的 **出口流量免费**，不像 AWS S3 那样按流量收费！
+> ⚠️ KV 特性提醒：删除后边缘节点最多 60 秒内可能仍命中旧缓存（最终一致性），但**存储配额会立即释放**。
+
+## 💰 成本
+
+Cloudflare 免费额度对个人展示站绰绰有余：
+
+| 资源 | 免费额度 | 本项目用途 |
+|------|---------|-----------|
+| Workers | 10 万次/天 | API + 页面渲染 |
+| D1 | 5GB 存储 | 元数据 + 文字内容 |
+| KV | 1GB 存储 | 图片二进制 + 会话 |
+| KV 删除操作 | **免费** | 删除图片不额外收费 |
+
+> 没有 R2，没有出口流量费，零成本运行。
 
 ## 🔧 使用说明
 
 ### 首次登录
 1. 访问 `https://你的域名/login`
-2. 输入用户名 `admin`，密码 `admin123`
-3. 登录后进入管理后台
+2. 用户名 `admin`，密码 `admin123`
+3. 进入管理后台
 
-### 添加图片/视频
-1. 在管理后台点击 **"添加内容"**
-2. 选择类型（图片/视频）
-3. 填写标题
-4. 拖拽或点击上传文件
-5. 可选填写描述、标签
-6. 点击保存
+### 添加图片
+1. 后台 → **＋ 添加内容** → 类型选「图片」
+2. 拖拽或点击上传（≤24MB）
+3. 填写标题、描述、标签 → 保存
 
-### 添加文字内容
-1. 点击 **"添加内容"**
-2. 选择类型 **"文字"**
-3. 填写标题和文字内容
-4. 保存
+### 添加视频
+1. **＋ 添加内容** → 类型选「视频」
+2. 在"视频地址"填入外链 URL（YouTube / B站 embed / mp4 直链）
+3. 保存
+
+### 添加文字
+1. **＋ 添加内容** → 类型选「文字」
+2. 填写标题和文字内容 → 保存
+
+### 删除（释放存储）
+- 单条删除：点击行末「删除」→ 确认 → 图片从 KV 彻底清除
+- 批量删除：勾选多条 → 「🗑 批量删除」→ 确认
 
 ### 修改管理员密码
-在 D1 控制台执行：
-```sql
--- 生成新密码的 SHA-256 哈希后更新
-UPDATE admins SET password_hash = '新哈希值' WHERE username = 'admin';
-```
-
-生成哈希的方法（浏览器控制台）：
-```javascript
+浏览器控制台执行：
+```js
 crypto.subtle.digest('SHA-256', new TextEncoder().encode('新密码'))
-  .then(h => Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join(''));
+  .then(h => console.log(Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2,'0')).join('')));
+```
+将输出的哈希值更新到 D1：
+```sql
+UPDATE admins SET password_hash = '哈希值' WHERE username = 'admin';
 ```
 
 ## 🛡️ 安全建议
-
-1. **修改默认密码** — 部署后立即修改 admin 密码
-2. **绑定自定义域名** — 避免使用 `*.workers.dev` 暴露账户信息
-3. **开启 Cloudflare Access** — 对 `/admin` 路径增加额外保护
-4. **设置 R2 存储桶为私有** — 本项目通过 Worker 代理访问，无需公开桶
-5. **定期备份 D1** — 使用 `wrangler d1 time-travel` 功能
+1. 部署后立即修改默认密码
+2. 绑定自定义域名（避免 `*.workers.dev` 暴露信息）
+3. 对 `/admin` 和 `/api/*` 路径开启 Cloudflare Access 额外保护
+4. KV 命名空间设为私有（默认即私有）
 
 ## 📝 License
-
-MIT License
+MIT

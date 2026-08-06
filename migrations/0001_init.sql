@@ -4,9 +4,11 @@ CREATE TABLE IF NOT EXISTS media_items (
     type TEXT NOT NULL CHECK (type IN ('image', 'video', 'text')),
     title TEXT NOT NULL,
     description TEXT DEFAULT '',
-    -- 图片/视频：R2 中的 key；文字：纯文本内容
+    -- image  : KV 中的 key（二进制存在 MEDIA_KV）
+    -- video  : 外部直链 URL（YouTube/B站/任意 mp4 链接）
+    -- text   : 纯文本内容
     content TEXT NOT NULL,
-    -- 缩略图 key（可选）
+    -- 缩略图 key（可选，image 类型可存 KV key）
     thumbnail_key TEXT DEFAULT NULL,
     -- 标签，逗号分隔
     tags TEXT DEFAULT '',

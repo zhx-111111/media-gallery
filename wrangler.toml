@@ -9,15 +9,15 @@ binding = "DB"
 database_name = "media_gallery_db"
 database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
 
-# R2 存储桶绑定（存储图片/视频文件）
-[[r2_buckets]]
-binding = "MEDIA_BUCKET"
-bucket_name = "media-gallery-bucket"
-
-# KV 命名空间绑定（存储管理员会话/缓存）
+# KV 命名空间 #1：存储管理员会话 / 缓存
 [[kv_namespaces]]
 binding = "CACHE"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "REPLACE_WITH_YOUR_KV_CACHE_ID"
+
+# KV 命名空间 #2：存储图片二进制（单值 ≤25MB，写后最终一致）
+[[kv_namespaces]]
+binding = "MEDIA_KV"
+id = "REPLACE_WITH_YOUR_KV_MEDIA_ID"
 
 [observability]
 enabled = true
@@ -29,3 +29,5 @@ ADMIN_PASSWORD = "change-me-to-a-strong-password"
 SITE_NAME = "我的媒体画廊"
 # 每页展示数量
 PAGE_SIZE = "24"
+# 单文件大小上限（字节），默认 24MB，留 1MB 余量给 KV metadata
+MAX_FILE_SIZE = "25165824"
