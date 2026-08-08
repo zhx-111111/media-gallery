@@ -6,12 +6,12 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "media_gallery_db"
-database_id = "__D1_DB_ID__"
+database_id = "${D1_DB_ID}"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = "__KV_CACHE_ID__"
+id = "${KV_CACHE_ID}"
 
 [[kv_namespaces]]
 binding = "MEDIA_KV"
-id = "__KV_MEDIA_ID__"
+id = "${KV_MEDIA_ID}"
