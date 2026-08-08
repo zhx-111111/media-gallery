@@ -1,37 +1,25 @@
-name = "media-gallery-worker"
+name = "media-gallery"
 main = "src/worker.js"
-compatibility_date = "2026-08-01"
+compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# ─── 资源 ID 通过环境变量注入（本地或 GitHub Actions 均可） ───
-# 本地用法：export D1_DB_ID=xxx KV_CACHE_ID=yyy KV_MEDIA_ID=zzz && wrangler deploy
-# Actions 用法：在仓库 Secrets 中配置同名变量，workflow 自动注入
+# 资源 ID 通过 GitHub Actions 渲染替换（scripts/render-wrangler.mjs）
+# 本地开发请手动填入真实 ID，或设置同名环境变量后运行渲染脚本
 
-# D1 数据库绑定（存储元数据）
 [[d1_databases]]
 binding = "DB"
 database_name = "media_gallery_db"
 database_id = "${D1_DB_ID}"
 
-# KV 命名空间 #1：存储管理员会话 / 缓存
 [[kv_namespaces]]
 binding = "CACHE"
 id = "${KV_CACHE_ID}"
 
-# KV 命名空间 #2：存储图片二进制
 [[kv_namespaces]]
 binding = "MEDIA_KV"
 id = "${KV_MEDIA_ID}"
 
-[observability]
-enabled = true
-
-[vars]
-# 管理员密码（请修改为强密码）
-ADMIN_PASSWORD = "change-me-to-a-strong-password"
-# 站点名称
-SITE_NAME = "我的媒体画廊"
-# 每页展示数量
-PAGE_SIZE = "24"
-# 单文件大小上限（字节），默认 24MB，留 1MB 余量给 KV metadata
-MAX_FILE_SIZE = "25165824"
+# 可选：自定义域名路由（绑域名后取消注释并改域名）
+# [[routes]]
+# pattern = "gallery.你的域名.com"
+# custom_domain = true
