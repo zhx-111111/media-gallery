@@ -9,15 +9,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Apply migrations & deploy Worker
-    container: node:20-bookworm   # 自带 node/npm，免装
+    container: node:20-bookworm
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify & install wrangler only
+      - name: Install wrangler via npm with retries + mirror
         run: |
           set -e
           node -v && npm -v
-          npm install --no-audit --no-fund wrangler@4.86.0
+          # 设置国内镜像 + 长超时 + 重试
+          npm config set fetch-retries 5
+          npm config set fetch-retry-mintimeout 20000
+          npm config set fetch-retry-maxtimeout 120000
+          npm config set registry https://registry.npmmirror.com
+          npm install --no-audit --no-fund --loglevel verbose \
+            wrangler@4.86.0 2>&1 | tail -30
           echo "--- wrangler ---"
           npx wrangler --version
 
