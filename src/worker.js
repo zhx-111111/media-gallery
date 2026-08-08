@@ -1135,7 +1135,7 @@ const ITEMS=${JSON.stringify((items.results||[]).map(i=>({id:i.id,title:i.title,
 let editingId=null;let galleryKeys=[];
 
 // 填充分类下拉
-function fillCatSelect(){const sel=document.getElementById('f_cat');sel.innerHTML='<option value="">-- 无 --</option>'+CATS.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}\x3c/option>`).join('');}
+function fillCatSelect(){const sel=document.getElementById('f_cat');sel.innerHTML='<option value="">-- 无 --</option>'+CATS.map(c=>`\x3c option value="${esc(c.name)}">${esc(c.name)}\x3c/option>`).join('');}
 
 // 上传文件
 async function uploadFile(input,target){if(!input.files[0])return;const fd=new FormData();fd.append('file',input.files[0]);showToast('上传中...','info');const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok){if(target==='cover'){document.getElementById('f_cover_key').value=j.key;document.getElementById('cover_preview').innerHTML=`<img src="/file/${j.key}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-3);">`;}else if(target==='content'){document.getElementById('f_content_key').value=j.key;document.getElementById('f_content_url').value='/file/'+j.key;}else if(target==='attach'){document.getElementById('f_attach_key').value=j.key;}}else{showToast(j.error||'上传失败','error');}}
