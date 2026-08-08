@@ -467,7 +467,7 @@ async function handleFrontend(request,env,url){
   }
   heroHTML+=`<h1 class="hero-title">${esc(settings.brand_name||'精选作品')}</h1>`;
   if(settings.site_description)heroHTML+=`<p class="hero-subtitle">${esc(settings.site_description)}</p>`;
-  heroHTML+=`<div class="hero-actions"><a href="#gallery" class="btn btn-primary">浏览作品</a>${settings.about_html?`<a href="/about" class="btn btn-ghost">关于</a>`:''}</div></div>`;
+  heroHTML+=`<div class="hero-actions"><a href="#gallery" class="btn btn-primary">浏览作品</a>${settings.about_html?('<a href="/about" class="btn btn-ghost">关于</a>'):''}</div></div>`;
 
   // 导航链接
   const navLinks=safeJSON(settings.nav_links,'[]');
@@ -529,8 +529,8 @@ async function handleFrontend(request,env,url){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(settings.brand_name)}</title>
-${settings.site_description?`<meta name="description" content="${escAttr(settings.site_description)}">`:''}
-${settings.site_keywords?`<meta name="keywords" content="${escAttr(settings.site_keywords)}">`:''}
+  ${settings.site_description?('<meta name="description" content="'+escAttr(settings.site_description)+'">'):''}
+  ${settings.site_keywords?('<meta name="keywords" content="'+escAttr(settings.site_keywords)+'">'):''}
 <link rel="alternate" type="application/rss+xml" title="${esc(settings.brand_name)}" href="/rss.xml">
 ${customCSS}
 <style>${BASE_CSS}</style>
@@ -627,9 +627,9 @@ async function handleItemDetail(request,env,slug){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(item.title)} - ${esc(settings.brand_name)}</title>
-${seoDesc?`<meta name="description" content="${escAttr(seoDesc)}">`:''}
-${seoKw?`<meta name="keywords" content="${escAttr(seoKw)}">`:''}
-${ogImg?`<meta property="og:image" content="${escAttr(request.url.split('/').slice(0,3).join('/'))}${ogImg}">`:''}
+  ${seoDesc?('<meta name="description" content="'+escAttr(seoDesc)+'">'):''}
+  ${seoKw?('<meta name="keywords" content="'+escAttr(seoKw)+'">'):''}
+  ${ogImg?('<meta property="og:image" content="'+escAttr(request.url.split('/').slice(0,3).join('/'))+ogImg+'">'):''}
 <meta property="og:title" content="${escAttr(item.title)}">
 <meta property="og:description" content="${escAttr(seoDesc)}">
 <style>${BASE_CSS}</style>
@@ -644,9 +644,9 @@ ${ogImg?`<meta property="og:image" content="${escAttr(request.url.split('/').sli
 </div></nav>
 
 <div class="detail-hero ${escAttr(customClass)}">
-  ${item.type==='video'&&item.content.startsWith('http')?`<video src="${escAttr(item.content)}" controls poster="${item.cover_key?`/file/${item.cover_key}`:''}" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);">`:''}
-  ${item.type==='image'&&item.content?`<img src="/file/${item.content}" alt="${esc(item.title)}" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">`:''}
-  ${item.type==='text'&&item.cover_key?`<img src="/file/${item.cover_key}" alt="" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">`:''}
+  ${item.type==='video'&&item.content.startsWith('http')?('<video src="'+escAttr(item.content)+'" controls poster="'+(item.cover_key?'/file/'+item.cover_key:'')+'" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);>">'):''}
+  ${item.type==='image'&&item.content?('<img src="/file/'+item.content+'" alt="'+esc(item.title)+'" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">'):''}
+  ${item.type==='text'&&item.cover_key?('<img src="/file/'+item.cover_key+'" alt="" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">'):''}
 </div>
 
 <div class="detail-body">
@@ -657,8 +657,8 @@ ${ogImg?`<meta property="og:image" content="${escAttr(request.url.split('/').sli
     <span style="font-size:var(--fs-micro);color:var(--text-tertiary);">👁 ${item.views||0} 次浏览</span>
     <span style="font-size:var(--fs-micro);color:var(--text-tertiary);">${formatDate(item.publish_at||item.created_at)}</span>
   </div>
-  ${item.description?`<p class="detail-desc">${esc(item.description)}</p>`:''}
-  ${item.type==='text'&&item.content?`<div class="detail-content">${item.content}</div>`:''}
+  ${item.description?('<p class="detail-desc">'+esc(item.description)+'</p>'):''}
+  ${item.type==='text'&&item.content?('<div class="detail-content">'+item.content+'</div>'):''}
   <div class="detail-actions">
     <button class="copy-link-btn" onclick="copyLink('${escAttr(item.title)}')">🔗 ${esc(copyText)}</button>
     ${attachHTML}
@@ -668,7 +668,7 @@ ${ogImg?`<meta property="og:image" content="${escAttr(request.url.split('/').sli
 ${galleryHTML}
 ${relatedHTML}
 
-${settings.footer_html?`<div class="site-footer">${settings.footer_html}</div>`:`<div class="site-footer">© ${new Date().getFullYear()} ${esc(settings.brand_name)}</div>`}
+${settings.footer_html?('<div class="site-footer">'+settings.footer_html+'</div>'):('<div class="site-footer">© '+new Date().getFullYear()+' '+esc(settings.brand_name)+'</div>')}
 ${MOUSE_TRACKER}
 <script>
 function copyLink(title){navigator.clipboard.writeText(location.href).then(()=>{showToast('✅ 链接已复制','success');},()=>{showToast('❌ 复制失败','error');});}
@@ -699,7 +699,7 @@ async function handleAboutPage(request,env){
   <h1 class="detail-title">关于</h1>
   <div class="detail-content">${settings.about_html||'<p>暂无内容</p>'}</div>
 </div>
-${settings.footer_html?`<div class="site-footer">${settings.footer_html}</div>`:''}
+${settings.footer_html?('<div class="site-footer">'+settings.footer_html+'</div>'):''}
 ${MOUSE_TRACKER}
 </body></html>`;
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
@@ -980,7 +980,7 @@ async function renderAdmin(env,url){
       const catName=Array.isArray(cats)?(cats[0]||'-'):'-';
       tableHTML+=`<tr data-id="${item.id}">
         <td><input type="checkbox" class="rowChk" value="${item.id}"></td>
-        <td>${cover?`<img src="${cover}" style="width:48px;height:36px;object-fit:cover;border-radius:6px;">`:'<span style="color:var(--text-tertiary);font-size:var(--fs-micro);">无</span>'}</td>
+        <td>${cover?('<img src="'+cover+'" style="width:48px;height:36px;object-fit:cover;border-radius:6px;">'):('<span style="color:var(--text-tertiary);font-size:var(--fs-micro);">无</span>')}</td>
         <td><a href="/item/${encURI(slug)}" target="_blank" style="color:var(--accent);font-weight:var(--fw-medium);">${esc(item.title)}</a><div style="font-size:var(--fs-micro);color:var(--text-tertiary);">/${encURI(slug)}</div></td>
         <td><span class="badge ${item.type==='image'?'badge-image':item.type==='video'?'badge-video':'badge-text'}">${item.type}</span></td>
         <td>${esc(catName)}</td>
