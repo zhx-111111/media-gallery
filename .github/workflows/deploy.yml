@@ -21,7 +21,7 @@ jobs:
 
       - name: Install wrangler
         run: |
-          npm install --no-audit --no-fund wrangler@4.86.0
+          npm install --no-audit --no-fund --legacy-peer-deps wrangler@4.86.0
           npx wrangler --version
 
       - name: Inject real IDs into wrangler.toml
@@ -38,3 +38,4 @@ jobs:
 
       - name: Deploy Worker
         run: npx wrangler deploy --env production
+
