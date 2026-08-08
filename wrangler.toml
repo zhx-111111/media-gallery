@@ -3,23 +3,15 @@ main = "src/worker.js"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# 资源 ID 通过 GitHub Actions 渲染替换（scripts/render-wrangler.mjs）
-# 本地开发请手动填入真实 ID，或设置同名环境变量后运行渲染脚本
-
 [[d1_databases]]
 binding = "DB"
 database_name = "media_gallery_db"
-database_id = "${D1_DB_ID}"
+database_id = "__D1_DB_ID__"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = "${KV_CACHE_ID}"
+id = "__KV_CACHE_ID__"
 
 [[kv_namespaces]]
 binding = "MEDIA_KV"
-id = "${KV_MEDIA_ID}"
-
-# 可选：自定义域名路由（绑域名后取消注释并改域名）
-# [[routes]]
-# pattern = "gallery.你的域名.com"
-# custom_domain = true
+id = "__KV_MEDIA_ID__"
