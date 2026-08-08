@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '24'
 
-      - run: npm install
+      - run: npm install --legacy-peer-deps
 
       # 关键：先把 ${VAR} 替换成真实 Secret 值
       - name: Render wrangler.toml with real IDs
