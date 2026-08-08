@@ -1,4 +1,23 @@
-/**
+#!/usr/bin/env python3
+"""
+Build the complete worker.js with all 16 customization features.
+Reads design-system.js for tokens, inlines everything into a single worker.js.
+"""
+import re, pathlib
+
+ROOT = pathlib.Path('/data/workspace/media-gallery')
+SRC = ROOT / 'src'
+
+# ── Read design tokens ──
+ds_js = (SRC / 'design-system.js').read_text()
+m = re.search(r'`(.+?)`', ds_js, re.S)
+DESIGN_TOKENS = m.group(1) if m else ''
+
+# ============================================================
+# Build the full worker.js
+# ============================================================
+
+HEADER = r'''/**
  * Media Gallery — Cloudflare Workers + D1 + KV
  *  UI: Apple 静奢风 设计系统 v5 — 16 项自定义全开
  *  ─────────────────────────────────────────────
@@ -10,7 +29,9 @@
  *  28 复制链接     + RSS          + Sitemap
  */
 export default { async fetch(r,e){return handleRequest(r,e);} };
-// ===================== 工具函数 =====================
+'''
+
+UTILS = r'''// ===================== 工具函数 =====================
 async function sha256(t){const e=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return[...new Uint8Array(e)].map(b=>b.toString(16).padStart(2,'0')).join('');}
 function randStr(l){l=l||16;let s='';const c='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';for(let i=0;i<l;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
 function esc(s){if(!s)return'';return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
@@ -20,131 +41,14 @@ function nowISO(){return new Date().toISOString();}
 function parseBool(v){return v===1||v==='1'||v===true||v==='true';}
 function safeJSON(s,def){try{return JSON.parse(s||'null')||def;}catch(e){return def;}}
 function isVisible(item){const now=new Date();if(item.is_hidden)return false;if(item.publish_at&&new Date(item.publish_at)>now)return false;if(item.expire_at&&new Date(item.expire_at)<now)return false;return true;}
+'''
 
-function encURI(s){return encodeURIComponent(String(s||''));}
-function formatDate(s){if(!s)return'';try{return new Date(s).toLocaleDateString('zh-CN',{year:'numeric',month:'short',day:'numeric'});}catch(e){return s;}}
-
+DESIGN_SYSTEM = r'''
 // ===================== 设计令牌（内联） =====================
-const DESIGN_TOKENS=`:root{
-  /* ── 1. 色彩系统 ─────────────────────────────── */
-  --bg-base:        #ECEEF6;
-  --bg-elevated:    rgba(255,255,255,0.70);
-  --bg-subtle:      rgba(255,255,255,0.50);
-  --bg-muted:       rgba(240,240,248,0.55);
+const DESIGN_TOKENS=`''' + DESIGN_TOKENS + r'''`;
+'''
 
-  --text-primary:    #1C1C1E;
-  --text-secondary:  #5A5A62;
-  --text-tertiary:   #9A9AA2;
-  --text-disabled:   #C7C7CC;
-
-  --accent:          #0071E3;
-  --accent-hover:    #0077ED;
-  --accent-pressed:  #0066CC;
-  --accent-soft:     rgba(0,113,227,0.10);
-  --accent-ring:     rgba(0,113,227,0.22);
-
-  --danger:          #FF3B30;
-  --danger-soft:     rgba(255,59,48,0.10);
-  --success:         #34C759;
-  --success-soft:    rgba(52,199,89,0.10);
-  --warning:         #FF9500;
-  --warning-soft:    rgba(255,149,0,0.10);
-
-  /* 渐变组合 */
-  --grad-blue:       linear-gradient(135deg,#0071E3 0%,#5E5CE6 100%);
-  --grad-purple:     linear-gradient(135deg,#5E5CE6 0%,#BF5AF2 100%);
-  --grad-pink:      linear-gradient(135deg,#FF2D55 0%,#FF375F 100%);
-  --grad-teal:      linear-gradient(135deg,#30B0C7 0%,#00C7BE 100%);
-  --grad-orange:    linear-gradient(135deg,#FF9500 0%,#FF6B35 100%);
-  --grad-green:     linear-gradient(135deg,#34C759 0%,#30D158 100%);
-  --grad-warm:      linear-gradient(135deg,#FF6B35 0%,#FFB800 100%);
-  --grad-cool:      linear-gradient(135deg,#4FACFE 0%,#00F2FE 100%);
-  --grad-aurora:    linear-gradient(135deg,rgba(99,102,241,0.30) 0%,rgba(168,85,247,0.22) 30%,rgba(56,189,248,0.26) 60%,rgba(52,211,153,0.18) 100%);
-
-  /* 毛玻璃边框 */
-  --border-hairline: rgba(255,255,255,0.50);
-  --border-default:  rgba(255,255,255,0.35);
-  --border-strong:   rgba(0,0,0,0.08);
-  --border-accent:   rgba(0,113,227,0.30);
-  --border-glass:    rgba(255,255,255,0.60);
-
-  /* ── 阴影系统（毛玻璃专属） ── */
-  --shadow-1:        0 1px 3px  rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.55);
-  --shadow-2:        0 2px 14px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.50);
-  --shadow-3:        0 4px 22px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.45);
-  --shadow-4:        0 8px 38px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.40);
-  --shadow-5:        0 20px 60px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.30);
-  --shadow-inset:    inset 0 1px 0 rgba(255,255,255,0.65), inset 0 -1px 0 rgba(0,0,0,0.03);
-  --shadow-glow-blue:   0 0 28px rgba(0,113,227,0.28);
-  --shadow-glow-purple: 0 0 32px rgba(94,92,230,0.24);
-
-  /* ── 圆角系统 ── */
-  --radius-xs:       8px;
-  --radius-sm:       12px;
-  --radius-md:       16px;
-  --radius-lg:       22px;
-  --radius-xl:       30px;
-  --radius-pill:     999px;
-
-  /* ── 2. 字体系统 ── */
-  --font-sans: -apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',
-               'PingFang SC','Helvetica Neue','WenQuanYi Micro Hei',sans-serif;
-  --font-mono: 'SF Mono','JetBrains Mono','Fira Code',monospace;
-
-  --fs-display: clamp(2.2rem, 6vw, 3.8rem);
-  --fs-h1:      clamp(1.6rem, 3.8vw, 2.2rem);
-  --fs-h2:      1.3rem;
-  --fs-h3:      1.1rem;
-  --fs-body:    0.95rem;
-  --fs-body-lg: 1.05rem;
-  --fs-caption: 0.82rem;
-  --fs-micro:   0.72rem;
-
-  --fw-regular:  400;
-  --fw-medium:   500;
-  --fw-semibold: 600;
-  --fw-bold:     700;
-  --fw-black:    800;
-
-  --lh-tight:    1.12;
-  --lh-snug:     1.35;
-  --lh-normal:    1.55;
-  --lh-relaxed:  1.7;
-
-  --tracking-tight:  -0.035em;
-  --tracking-normal: -0.01em;
-  --tracking-wide:    0.02em;
-
-  /* ── 3. 动效规范 ── */
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-decel:    cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-accel:    cubic-bezier(0.7, 0, 0.84, 0);
-  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  --dur-instant:  100ms;
-  --dur-fast:     220ms;
-  --dur-base:     360ms;
-  --dur-slow:     520ms;
-
-  /* ── 4. 布局 ── */
-  --space-1:  4px;  --space-2:  8px;  --space-3:  12px;
-  --space-4:  16px; --space-5:  24px; --space-6:  32px;
-  --space-7:  48px; --space-8:  64px; --space-9:  96px;
-
-  --content-narrow:  720px;
-  --content-base:    960px;
-  --content-wide:    1200px;
-
-  /* ── 5. 毛玻璃通用 ── */
-  --glass-bg:        rgba(255,255,255,0.55);
-  --glass-bg-strong: rgba(255,255,255,0.72);
-  --glass-bg-weak:   rgba(255,255,255,0.35);
-  --glass-blur:      blur(28px) saturate(200%);
-  --glass-blur-lg:   blur(44px) saturate(220%);
-  --glass-border:    1px solid rgba(255,255,255,0.55);
-  --glass-inner-glow:inset 0 1px 0 rgba(255,255,255,0.65), inset 0 -1px 0 rgba(0,0,0,0.04);
-}`;
-
+BASE_CSS = r'''
 const BASE_CSS=DESIGN_TOKENS+`
 /* ── Reset ────────────────────────────────────── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -383,7 +287,10 @@ body.dark-mode .form-input,.body.dark-mode .form-textarea,.body.dark-mode .form-
 /* ════════ 反模式清单 ════════ */
 /* ✗ 纯黑/纯白文字 ✗ 过强阴影 ✗ 无 blur 的"假玻璃" ✗ 超 600ms 动效 ✗ 阴影透明度 > 0.12 */
 `;
+'''
 
+# ===================== 路由 & 主入口 =====================
+MAIN_ROUTER = r'''
 async function handleRequest(request, env){
   const url=new URL(request.url);
   const path=url.pathname;
@@ -423,7 +330,10 @@ document.addEventListener('mousemove',e=>{
 const dm=localStorage.getItem('darkMode');
 if(dm==='on'||(dm==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.body.classList.add('dark-mode');}
 </script>`;
+'''
 
+# ===================== 前台渲染 =====================
+FRONTEND = r'''
 async function getSiteSettings(env){
   const rows=await env.DB.prepare('SELECT key,value FROM site_settings').all();
   const s={brand_name:'Gallery',theme_accent:'#0071E3',theme_dark_mode:'off',hero_bg_type:'gradient',hero_gradient:'',hero_image_key:'',hero_video_url:'',footer_html:'',announcement_html:'',nav_links:'[]',about_html:'',copy_link_text:'复制链接',lazy_placeholder:'',rss_enabled:'1',sitemap_enabled:'1',site_description:'',site_keywords:''};
@@ -563,7 +473,10 @@ lazyImgs.forEach(img=>io.observe(img));
 
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
 }
+'''
 
+# ===================== 详情页 =====================
+DETAIL_PAGE = r'''
 async function handleItemDetail(request,env,slug){
   const settings=await getSiteSettings(env);
   // 查找：先 custom_slug，再 slug，再 id
@@ -679,7 +592,10 @@ function toggleDarkMode(){document.body.classList.toggle('dark-mode');localStora
 
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
 }
+'''
 
+# ===================== 关于页 =====================
+ABOUT_PAGE = r'''
 async function handleAboutPage(request,env){
   const settings=await getSiteSettings(env);
   const html=`<!DOCTYPE html>
@@ -704,7 +620,10 @@ ${MOUSE_TRACKER}
 </body></html>`;
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
 }
+'''
 
+# ===================== RSS & Sitemap =====================
+RSS_SITEMAP = r'''
 async function handleRSS(request,env){
   const settings=await getSiteSettings(env);
   if(settings.rss_enabled!=='1')return new Response('RSS disabled',{status:404});
@@ -741,7 +660,10 @@ async function handleSitemap(request,env){
   xml+='</urlset>';
   return new Response(xml,{'Content-Type':'application/xml;charset=utf-8'});
 }
+'''
 
+# ===================== 文件服务 =====================
+FILE_SERVE = r'''
 async function handleFile(request,env,key){
   const obj=await env.MEDIA_KV.get(key,{type:'arrayBuffer'});
   if(!obj)return new Response('404',{status:404});
@@ -757,7 +679,16 @@ async function handleFavicon(request,env){
   const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%230071E3"/><text x="50" y="62" font-size="40" text-anchor="middle" fill="white" font-family="sans-serif">G</text></svg>';
   return new Response(svg,{headers:{'Content-Type':'image/svg+xml'}});
 }
+'''
 
+# ===================== 工具 JS =====================
+HELPERS_JS = r'''
+function encURI(s){return encodeURIComponent(String(s||''));}
+function formatDate(s){if(!s)return'';try{return new Date(s).toLocaleDateString('zh-CN',{year:'numeric',month:'short',day:'numeric'});}catch(e){return s;}}
+'''
+
+# ===================== API 处理 =====================
+API_HANDLER = r'''
 async function handleAPI(request,env,url){
   const path=url.pathname;
   const method=request.method;
@@ -894,7 +825,10 @@ async function generateUniqueCustomSlug(env,slug,excludeId){
   while(true){const r=await env.DB.prepare('SELECT id FROM media_items WHERE custom_slug=? AND id!=?').bind(s,parseInt(excludeId)||0).first();if(!r)break;s=base+'-'+i;i++;}
   return s;
 }
+'''
 
+# ===================== 后台管理页 =====================
+ADMIN_PAGE = r'''
 async function handleAdmin(request,env,url){
   const path=url.pathname;
   // 登录页
@@ -1204,3 +1138,13 @@ fillCatSelect();renderCats();
 
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
 }
+'''
+
+# ===================== 组装 =====================
+FULL_WORKER = HEADER + UTILS + HELPERS_JS + DESIGN_SYSTEM + BASE_CSS + MAIN_ROUTER + FRONTEND + DETAIL_PAGE + ABOUT_PAGE + RSS_SITEMAP + FILE_SERVE + API_HANDLER + ADMIN_PAGE
+
+# ── Write output ──
+out = ROOT / 'src' / 'worker.js'
+out.write_text(FULL_WORKER)
+print(f'✅ worker.js written: {len(FULL_WORKER)} chars, {FULL_WORKER.count(chr(10))+1} lines')
+print(f'   File size: {out.stat().st_size / 1024:.1f} KB')
