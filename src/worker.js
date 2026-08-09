@@ -1146,7 +1146,7 @@ async function uploadSimple(input,targetId){if(!input.files[0])return;const fd=n
 // 多图
 async function uploadGallery(input){for(const f of input.files){const fd=new FormData();fd.append('file',f);const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok){galleryKeys.push(j.key);renderGallery();}}}
 
-function renderGallery(){const c=document.getElementById('gallery_preview');c.innerHTML=galleryKeys.map((k,i)=>{return '<div style="display:flex;align-items:center;gap:8px;"><img src="/file/'+k+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;"><button class="btn btn-danger btn-sm" onclick="removeGallery('+i+')">移除</button></div>';}).join('');}
+function renderGallery(){var c=document.getElementById('gallery_preview');var html='';for(var i=0;i<galleryKeys.length;i++){html+='<div style="display:flex;align-items:center;gap:8px;"><img src="/file/'+galleryKeys[i]+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;"><button class="btn btn-danger btn-sm" onclick="removeGallery('+i+')">移除</button></div>';}c.innerHTML=html;}
 function removeGallery(i){galleryKeys.splice(i,1);renderGallery();}
 
 // 保存
@@ -1174,10 +1174,10 @@ async function batchDelete(){const ids=[...document.querySelectorAll('.rowChk:ch
 
 function toggleAll(m){document.querySelectorAll('.rowChk').forEach(c=>c.checked=m.checked);}
 
-function filterTable(q){q=q.toLowerCase();document.querySelectorAll('#dataTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});}
+function filterTable(q){q=q.toLowerCase();var rows=document.querySelectorAll('#dataTable tbody tr');for(var i=0;i<rows.length;i++){var r=rows[i];r.style.display=r.textContent.toLowerCase().indexOf(q)>=0?'':'none';}}
 
 // 分类
-function renderCats(){const c=document.getElementById('catList');if(!c)return;c.innerHTML=CATS.map((cat,i)=>{return '<div style="display:flex;gap:var(--space-2);align-items:center;padding:var(--space-2) var(--space-3);background:var(--glass-bg);border-radius:var(--radius-sm);"><input type="color" value="'+esc(cat.color||'#0071E3')+'" onchange="updateCatColor('+i+',this.value)" style="width:40px;padding:2px;"><input class="form-input" value="'+esc(cat.name)+'" onchange="updateCatName('+i+',this.value)" style="flex:1;"><button class="btn btn-danger btn-sm" onclick="delCat('+i+')">删除</button></div>';}).join('');}
+function renderCats(){var c=document.getElementById('catList');if(!c)return;var html='';for(var i=0;i<CATS.length;i++){var cat=CATS[i];html+='<div style="display:flex;gap:var(--space-2);align-items:center;padding:var(--space-2) var(--space-3);background:var(--glass-bg);border-radius:var(--radius-sm);"><input type="color" value="'+esc(cat.color||'#0071E3')+'" onchange="updateCatColor('+i+',this.value)" style="width:40px;padding:2px;"><input class="form-input" value="'+esc(cat.name)+'" onchange="updateCatName('+i+',this.value)" style="flex:1;"><button class="btn btn-danger btn-sm" onclick="delCat('+i+')">删除</button></div>';}c.innerHTML=html;}
 function addCategory(){const n=document.getElementById('newCatName').value;const c=document.getElementById('newCatColor').value;if(!n)return;CATS.push({name:n,color:c});saveCats();}
 function updateCatName(i,v){CATS[i].name=v;saveCats();}
 function updateCatColor(i,v){CATS[i].color=v;saveCats();}

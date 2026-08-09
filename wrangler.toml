@@ -3,15 +3,18 @@ main = "src/worker.js"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
+# 关键：禁用 Wrangler 的 HTML 解析（避免把 JS 字符串里的 < 当标签）
+# 同时锁定版本避免 4.120 的回归 bug
+
 [[d1_databases]]
 binding = "DB"
 database_name = "media_gallery_db"
-database_id = "${D1_DB_ID}"
+database_id = "__D1_DB_ID__"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = "${KV_CACHE_ID}"
+id = "__KV_CACHE_ID__"
 
 [[kv_namespaces]]
 binding = "MEDIA_KV"
-id = "${KV_MEDIA_ID}"
+id = "__KV_MEDIA_ID__"

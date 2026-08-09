@@ -1,16 +1,14 @@
 {
   "name": "media-gallery",
-  "version": "1.0.0",
-  "description": "基于 Cloudflare Workers + D1 + KV 的媒体展示网站（Apple UI 风格），图片存 KV，删除联动释放存储",
+  "version": "5.2.0",
+  "description": "Frosted-glass media gallery on Cloudflare Workers + D1 + KV",
+  "main": "src/worker.js",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "db:create": "wrangler d1 create media_gallery_db",
-    "db:migrate": "wrangler d1 migrations apply media_gallery_db",
-    "db:migrate:local": "wrangler d1 migrations apply media_gallery_db --local"
+    "deploy": "wrangler deploy --env production",
+    "migrate": "wrangler d1 migrations apply media_gallery_db --remote",
+    "check": "node --check src/worker.js"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260801.1",
-    "wrangler": "^4.0.0"
+    "wrangler": "4.86.0"
   }
 }
