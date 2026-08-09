@@ -1,12 +1,13 @@
 {
   "name": "media-gallery",
-  "version": "5.2.0",
-  "description": "Frosted-glass media gallery on Cloudflare Workers + D1 + KV",
+  "version": "6.0.0",
+  "description": "零配置部署的 Cloudflare Workers 作品集站点 — 深度毛玻璃 UI",
   "main": "src/worker.js",
   "scripts": {
-    "deploy": "wrangler deploy --env production",
+    "check": "node --check src/worker.js",
+    "deploy": "wrangler deploy",
     "migrate": "wrangler d1 migrations apply media_gallery_db --remote",
-    "check": "node --check src/worker.js"
+    "setup": "chmod +x deploy.sh && ./deploy.sh"
   },
   "devDependencies": {
     "wrangler": "4.86.0"
