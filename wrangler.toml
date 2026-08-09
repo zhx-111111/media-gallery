@@ -1,8 +1,11 @@
 # ============================================================
 #  Media Gallery — Cloudflare Workers
-#  部署方式：Cloudflare Dashboard → Workers & Pages
-#            → Create → Connect to Git → 选本仓库
-#  D1 / KV 资源由 deploy.sh 自动创建并注入
+#  部署流程（5 步搞定）：
+#    1. CF 控制台 → Workers & Pages → 连接 GitHub → 选本仓库
+#    2. CF 控制台 → 存储和数据库 → 建 D1（名: media_gallery_db）
+#    3. CF 控制台 → 存储和数据库 → 建 KV ×2（名: media_cache / media_kv）
+#    4. Worker 设置 → 绑定 → 绑 D1(KV名db) + KV×2(KV名kv,cache)
+#    5. 浏览器访问 https://你的域名/api/init/你的SECRET → 看到 ok 即完成
 # ============================================================
 
 name = "media-gallery"
@@ -10,26 +13,30 @@ main = "src/worker.js"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# ── D1 数据库（自动绑定，名称固定）──
+# ── D1 数据库 ────────────────────────────────────────────────
+# 绑定名 db 不可修改（代码里写死了 env.db）
+# 控制台建好后，绑定时变量名称填 db
 [[d1_databases]]
-binding = "DB"
+binding = "db"
 database_name = "media_gallery_db"
-database_id = "auto"          # 部署脚本会自动替换为真实 ID
+database_id = ""   # ← 控制台建完 D1 后填这里（或绑定时自动关联）
 
-# ── KV 命名空间 ──
+# ── KV 命名空间 ×2 ──────────────────────────────────────────
+# 绑定名 kv 和 cache 不可修改（代码里写死了）
+# 控制台建好后，绑定时变量名称分别填 kv 和 cache
 [[kv_namespaces]]
-binding = "CACHE"
-id = "auto"                   # 部署脚本会自动替换
+binding = "kv"
+id = ""            # ← 控制台建完 KV(media_kv) 后填这里
 
 [[kv_namespaces]]
-binding = "MEDIA_KV"
-id = "auto"                   # 部署脚本会自动替换
+binding = "cache"
+id = ""            # ← 控制台建完 KV(media_cache) 后填这里
 
-# ── 环境变量（无需 secret，全站默认配置）──
+# ── 环境变量（后台可改，这里只设默认值）────────────────────
 [vars]
-ADMIN_PASSWORD   = "admin123"
-PAGE_SIZE        = "24"
-MAX_FILE_SIZE    = "25165824"   # 24 MB
-DEFAULT_SITE_TITLE = "精选作品"
-DEFAULT_SITE_SUBTITLE = "图片 · 视频 · 文字 — 一切精彩，尽收眼底"
-DEFAULT_BRAND    = "Gallery"
+# ⚠️ 部署前务必改掉！这是初始化密钥，访问 /api/init/SECRET 用
+ADMIN_PASSWORD = "admin123"
+INIT_SECRET    = "change-me-to-anything-random"
+PAGE_SIZE      = "24"
+MAX_FILE_SIZE  = "25165824"
+DEFAULT_BRAND  = "Gallery"
