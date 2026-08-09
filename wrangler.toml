@@ -1,20 +1,35 @@
+# ============================================================
+#  Media Gallery — Cloudflare Workers
+#  部署方式：Cloudflare Dashboard → Workers & Pages
+#            → Create → Connect to Git → 选本仓库
+#  D1 / KV 资源由 deploy.sh 自动创建并注入
+# ============================================================
+
 name = "media-gallery"
 main = "src/worker.js"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# 关键：禁用 Wrangler 的 HTML 解析（避免把 JS 字符串里的 < 当标签）
-# 同时锁定版本避免 4.120 的回归 bug
-
+# ── D1 数据库（自动绑定，名称固定）──
 [[d1_databases]]
 binding = "DB"
 database_name = "media_gallery_db"
-database_id = "__D1_DB_ID__"
+database_id = "auto"          # 部署脚本会自动替换为真实 ID
 
+# ── KV 命名空间 ──
 [[kv_namespaces]]
 binding = "CACHE"
-id = "__KV_CACHE_ID__"
+id = "auto"                   # 部署脚本会自动替换
 
 [[kv_namespaces]]
 binding = "MEDIA_KV"
-id = "__KV_MEDIA_ID__"
+id = "auto"                   # 部署脚本会自动替换
+
+# ── 环境变量（无需 secret，全站默认配置）──
+[vars]
+ADMIN_PASSWORD   = "admin123"
+PAGE_SIZE        = "24"
+MAX_FILE_SIZE    = "25165824"   # 24 MB
+DEFAULT_SITE_TITLE = "精选作品"
+DEFAULT_SITE_SUBTITLE = "图片 · 视频 · 文字 — 一切精彩，尽收眼底"
+DEFAULT_BRAND    = "Gallery"
