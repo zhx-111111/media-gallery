@@ -5,3 +5,5 @@ node_modules/
 *.png
 !frontend_v6.png
 !admin_v6.png
+!frontend_v7.png
+!admin_v7.png
