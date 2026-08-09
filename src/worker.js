@@ -1,6 +1,6 @@
 /**
  * Media Gallery — Cloudflare Workers + D1 + KV
- *  UI: Apple 静奢风 设计系统 v5 — 16 项自定义全开
+ *  UI: Apple 静奢风 设计系统 v5.1 — 修复嵌套模板字符串语法错误
  *  ─────────────────────────────────────────────
  *  1 自定义 Slug   2 SEO 字段      3 发布时间
  *  7 隐藏/仅链接   8 多图画廊    10 自定义 CSS 类
@@ -467,7 +467,7 @@ async function handleFrontend(request,env,url){
   }
   heroHTML+=`<h1 class="hero-title">${esc(settings.brand_name||'精选作品')}</h1>`;
   if(settings.site_description)heroHTML+=`<p class="hero-subtitle">${esc(settings.site_description)}</p>`;
-  heroHTML+=`<div class="hero-actions"><a href="#gallery" class="btn btn-primary">浏览作品</a>${settings.about_html?('<a href="/about" class="btn btn-ghost">关于</a>'):''}</div></div>`;
+  heroHTML+=`<div class="hero-actions"><a href="#gallery" class="btn btn-primary">浏览作品</a>${settings.about_html?`<a href="/about" class="btn btn-ghost">关于</a>`:''}</div></div>`;
 
   // 导航链接
   const navLinks=safeJSON(settings.nav_links,'[]');
@@ -529,8 +529,8 @@ async function handleFrontend(request,env,url){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(settings.brand_name)}</title>
-  ${settings.site_description?('<meta name="description" content="'+escAttr(settings.site_description)+'">'):''}
-  ${settings.site_keywords?('<meta name="keywords" content="'+escAttr(settings.site_keywords)+'">'):''}
+${settings.site_description?`<meta name="description" content="${escAttr(settings.site_description)}">`:''}
+${settings.site_keywords?`<meta name="keywords" content="${escAttr(settings.site_keywords)}">`:''}
 <link rel="alternate" type="application/rss+xml" title="${esc(settings.brand_name)}" href="/rss.xml">
 ${customCSS}
 <style>${BASE_CSS}</style>
@@ -627,9 +627,9 @@ async function handleItemDetail(request,env,slug){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(item.title)} - ${esc(settings.brand_name)}</title>
-  ${seoDesc?('<meta name="description" content="'+escAttr(seoDesc)+'">'):''}
-  ${seoKw?('<meta name="keywords" content="'+escAttr(seoKw)+'">'):''}
-  ${ogImg?('<meta property="og:image" content="'+escAttr(request.url.split('/').slice(0,3).join('/'))+ogImg+'">'):''}
+${seoDesc?`<meta name="description" content="${escAttr(seoDesc)}">`:''}
+${seoKw?`<meta name="keywords" content="${escAttr(seoKw)}">`:''}
+${ogImg?`<meta property="og:image" content="${escAttr(request.url.split('/').slice(0,3).join('/'))}${ogImg}">`:''}
 <meta property="og:title" content="${escAttr(item.title)}">
 <meta property="og:description" content="${escAttr(seoDesc)}">
 <style>${BASE_CSS}</style>
@@ -644,9 +644,9 @@ async function handleItemDetail(request,env,slug){
 </div></nav>
 
 <div class="detail-hero ${escAttr(customClass)}">
-  ${item.type==='video'&&item.content.startsWith('http')?('<video src="'+escAttr(item.content)+'" controls poster="'+(item.cover_key?'/file/'+item.cover_key:'')+'" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);>">'):''}
-  ${item.type==='image'&&item.content?('<img src="/file/'+item.content+'" alt="'+esc(item.title)+'" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">'):''}
-  ${item.type==='text'&&item.cover_key?('<img src="/file/'+item.cover_key+'" alt="" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">'):''}
+  ${item.type==='video'&&item.content.startsWith('http')?`<video src="${escAttr(item.content)}" controls poster="${item.cover_key?`/file/${item.cover_key}`:''}" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);">`:''}
+  ${item.type==='image'&&item.content?`<img src="/file/${item.content}" alt="${esc(item.title)}" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">`:''}
+  ${item.type==='text'&&item.cover_key?`<img src="/file/${item.cover_key}" alt="" style="width:100%;border-radius:var(--radius-lg);box-shadow:var(--shadow-4);" loading="lazy">`:''}
 </div>
 
 <div class="detail-body">
@@ -657,8 +657,8 @@ async function handleItemDetail(request,env,slug){
     <span style="font-size:var(--fs-micro);color:var(--text-tertiary);">👁 ${item.views||0} 次浏览</span>
     <span style="font-size:var(--fs-micro);color:var(--text-tertiary);">${formatDate(item.publish_at||item.created_at)}</span>
   </div>
-  ${item.description?('<p class="detail-desc">'+esc(item.description)+'</p>'):''}
-  ${item.type==='text'&&item.content?('<div class="detail-content">'+item.content+'</div>'):''}
+  ${item.description?`<p class="detail-desc">${esc(item.description)}</p>`:''}
+  ${item.type==='text'&&item.content?`<div class="detail-content">${item.content}</div>`:''}
   <div class="detail-actions">
     <button class="copy-link-btn" onclick="copyLink('${escAttr(item.title)}')">🔗 ${esc(copyText)}</button>
     ${attachHTML}
@@ -668,7 +668,7 @@ async function handleItemDetail(request,env,slug){
 ${galleryHTML}
 ${relatedHTML}
 
-${settings.footer_html?('<div class="site-footer">'+settings.footer_html+'</div>'):('<div class="site-footer">© '+new Date().getFullYear()+' '+esc(settings.brand_name)+'</div>')}
+${settings.footer_html?`<div class="site-footer">${settings.footer_html}</div>`:`<div class="site-footer">© ${new Date().getFullYear()} ${esc(settings.brand_name)}</div>`}
 ${MOUSE_TRACKER}
 <script>
 function copyLink(title){navigator.clipboard.writeText(location.href).then(()=>{showToast('✅ 链接已复制','success');},()=>{showToast('❌ 复制失败','error');});}
@@ -699,7 +699,7 @@ async function handleAboutPage(request,env){
   <h1 class="detail-title">关于</h1>
   <div class="detail-content">${settings.about_html||'<p>暂无内容</p>'}</div>
 </div>
-${settings.footer_html?('<div class="site-footer">'+settings.footer_html+'</div>'):''}
+${settings.footer_html?`<div class="site-footer">${settings.footer_html}</div>`:''}
 ${MOUSE_TRACKER}
 </body></html>`;
   return new Response(html,{'Content-Type':'text/html;charset=utf-8'});
@@ -980,7 +980,7 @@ async function renderAdmin(env,url){
       const catName=Array.isArray(cats)?(cats[0]||'-'):'-';
       tableHTML+=`<tr data-id="${item.id}">
         <td><input type="checkbox" class="rowChk" value="${item.id}"></td>
-        <td>${cover?('<img src="'+cover+'" style="width:48px;height:36px;object-fit:cover;border-radius:6px;">'):('<span style="color:var(--text-tertiary);font-size:var(--fs-micro);">无</span>')}</td>
+        <td>${cover?`<img src="${cover}" style="width:48px;height:36px;object-fit:cover;border-radius:6px;">`:'<span style="color:var(--text-tertiary);font-size:var(--fs-micro);">无</span>'}</td>
         <td><a href="/item/${encURI(slug)}" target="_blank" style="color:var(--accent);font-weight:var(--fw-medium);">${esc(item.title)}</a><div style="font-size:var(--fs-micro);color:var(--text-tertiary);">/${encURI(slug)}</div></td>
         <td><span class="badge ${item.type==='image'?'badge-image':item.type==='video'?'badge-video':'badge-text'}">${item.type}</span></td>
         <td>${esc(catName)}</td>
@@ -1135,10 +1135,10 @@ const ITEMS=${JSON.stringify((items.results||[]).map(i=>({id:i.id,title:i.title,
 let editingId=null;let galleryKeys=[];
 
 // 填充分类下拉
-function fillCatSelect(){const sel=document.getElementById('f_cat');sel.innerHTML='<option value="">-- 无 --</option>'+CATS.map(c=>'<option value="'+esc(c.name)+'">'+esc(c.name)+'</option>').join('');}
+function fillCatSelect(){const sel=document.getElementById('f_cat');var opts='<option value="">-- 无 --</option>';for(var i=0;i<CATS.length;i++){opts+='<option value="'+esc(CATS[i].name)+'">'+esc(CATS[i].name)+'</option>';}sel.innerHTML=opts;}
 
 // 上传文件
-async function uploadFile(input,target){if(!input.files[0])return;const fd=new FormData();fd.append('file',input.files[0]);showToast('上传中...','info');const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok){if(target==='cover'){document.getElementById('f_cover_key').value=j.key;document.getElementById('cover_preview').innerHTML=`<img src="/file/${j.key}" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-3);">`;}else if(target==='content'){document.getElementById('f_content_key').value=j.key;document.getElementById('f_content_url').value='/file/'+j.key;}else if(target==='attach'){document.getElementById('f_attach_key').value=j.key;}}else{showToast(j.error||'上传失败','error');}}
+async function uploadFile(input,target){if(!input.files[0])return;const fd=new FormData();fd.append('file',input.files[0]);showToast('上传中...','info');const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok){if(target==='cover'){document.getElementById('f_cover_key').value=j.key;document.getElementById('cover_preview').innerHTML='<img src="/file/'+j.key+'" style="max-width:100%;border-radius:12px;box-shadow:var(--shadow-3);">';}else if(target==='content'){document.getElementById('f_content_key').value=j.key;document.getElementById('f_content_url').value='/file/'+j.key;}else if(target==='attach'){document.getElementById('f_attach_key').value=j.key;}}else{showToast(j.error||'上传失败','error');}}
 
 // 上传简单（设置页）
 async function uploadSimple(input,targetId){if(!input.files[0])return;const fd=new FormData();fd.append('file',input.files[0]);const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok)document.getElementById(targetId).value=j.key;}
@@ -1146,7 +1146,7 @@ async function uploadSimple(input,targetId){if(!input.files[0])return;const fd=n
 // 多图
 async function uploadGallery(input){for(const f of input.files){const fd=new FormData();fd.append('file',f);const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(r.ok){galleryKeys.push(j.key);renderGallery();}}}
 
-function renderGallery(){const c=document.getElementById('gallery_preview');c.innerHTML=galleryKeys.map((k,i)=>`<div style="display:flex;align-items:center;gap:8px;"><img src="/file/${k}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;"><button class="btn btn-danger btn-sm" onclick="removeGallery(${i})">移除</button></div>`).join('');}
+function renderGallery(){const c=document.getElementById('gallery_preview');c.innerHTML=galleryKeys.map((k,i)=>{return '<div style="display:flex;align-items:center;gap:8px;"><img src="/file/'+k+'" style="width:80px;height:60px;object-fit:cover;border-radius:8px;"><button class="btn btn-danger btn-sm" onclick="removeGallery('+i+')">移除</button></div>';}).join('');}
 function removeGallery(i){galleryKeys.splice(i,1);renderGallery();}
 
 // 保存
@@ -1164,7 +1164,7 @@ if(r.ok){showToast(action==='publish'?'✅ 已发布':'💾 已保存草稿','su
 function previewItem(){const slug=document.getElementById('f_slug').value||document.getElementById('f_title').value||'preview';window.open('/item/'+encodeURIComponent(slug),'_blank');}
 
 // 编辑
-function editItem(id){const item=ITEMS.find(i=>i.id===id);if(!item)return;editingId=id;fillCatSelect();document.getElementById('f_title').value=item.title;document.getElementById('f_slug').value=item.custom_slug||'';document.getElementById('f_desc').value=item.description;document.getElementById('f_type').value=item.type;document.getElementById('f_cat').value=item.category;document.getElementById('f_tags').value=item.tags;document.getElementById('f_seo_desc').value=item.seo_description;document.getElementById('f_seo_kw').value=item.seo_keywords;document.getElementById('f_publish').value=item.publish_at?item.publish_at.slice(0,16):'';document.getElementById('f_expire').value=item.expire_at?item.expire_at.slice(0,16):'';document.getElementById('f_weight').value=item.sort_weight||0;document.getElementById('f_hidden').checked=!!item.is_hidden;document.getElementById('f_css_class').value=item.custom_css_class||'';document.getElementById('f_cover_key').value=item.cover_key||'';if(item.cover_key)document.getElementById('cover_preview').innerHTML=`<img src="/file/${item.cover_key}" style="max-width:100%;border-radius:12px;">`;if(item.content&&item.content.startsWith('/file/'))document.getElementById('f_content_key').value=item.content.slice(6);else document.getElementById('f_content_url').value=item.content||'';galleryKeys=[...item.gallery_keys];renderGallery();document.getElementById('f_attach_key').value=item.attachment_key||'';location.hash='upload';window.scrollTo(0,0);}
+function editItem(id){const item=ITEMS.find(i=>i.id===id);if(!item)return;editingId=id;fillCatSelect();document.getElementById('f_title').value=item.title;document.getElementById('f_slug').value=item.custom_slug||'';document.getElementById('f_desc').value=item.description;document.getElementById('f_type').value=item.type;document.getElementById('f_cat').value=item.category;document.getElementById('f_tags').value=item.tags;document.getElementById('f_seo_desc').value=item.seo_description;document.getElementById('f_seo_kw').value=item.seo_keywords;document.getElementById('f_publish').value=item.publish_at?item.publish_at.slice(0,16):'';document.getElementById('f_expire').value=item.expire_at?item.expire_at.slice(0,16):'';document.getElementById('f_weight').value=item.sort_weight||0;document.getElementById('f_hidden').checked=!!item.is_hidden;document.getElementById('f_css_class').value=item.custom_css_class||'';document.getElementById('f_cover_key').value=item.cover_key||'';if(item.cover_key)document.getElementById('cover_preview').innerHTML='<img src="/file/'+item.cover_key+'" style="max-width:100%;border-radius:12px;">';if(item.content&&item.content.startsWith('/file/'))document.getElementById('f_content_key').value=item.content.slice(6);else document.getElementById('f_content_url').value=item.content||'';galleryKeys=[...item.gallery_keys];renderGallery();document.getElementById('f_attach_key').value=item.attachment_key||'';location.hash='upload';window.scrollTo(0,0);}
 
 // 删除
 async function deleteItem(id){if(!confirm('确定删除？'))return;const r=await fetch('/api/items/'+id,{method:'DELETE'});if(r.ok){showToast('已删除','success');setTimeout(()=>location.reload(),500);}}
@@ -1177,7 +1177,7 @@ function toggleAll(m){document.querySelectorAll('.rowChk').forEach(c=>c.checked=
 function filterTable(q){q=q.toLowerCase();document.querySelectorAll('#dataTable tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});}
 
 // 分类
-function renderCats(){const c=document.getElementById('catList');if(!c)return;c.innerHTML=CATS.map((cat,i)=>`<div style="display:flex;gap:var(--space-2);align-items:center;padding:var(--space-2) var(--space-3);background:var(--glass-bg);border-radius:var(--radius-sm);"><input type="color" value="${esc(cat.color||'#0071E3')}" onchange="updateCatColor(${i},this.value)" style="width:40px;padding:2px;"><input class="form-input" value="${esc(cat.name)}" onchange="updateCatName(${i},this.value)" style="flex:1;"><button class="btn btn-danger btn-sm" onclick="delCat(${i})">删除</button></div>`).join('');}
+function renderCats(){const c=document.getElementById('catList');if(!c)return;c.innerHTML=CATS.map((cat,i)=>{return '<div style="display:flex;gap:var(--space-2);align-items:center;padding:var(--space-2) var(--space-3);background:var(--glass-bg);border-radius:var(--radius-sm);"><input type="color" value="'+esc(cat.color||'#0071E3')+'" onchange="updateCatColor('+i+',this.value)" style="width:40px;padding:2px;"><input class="form-input" value="'+esc(cat.name)+'" onchange="updateCatName('+i+',this.value)" style="flex:1;"><button class="btn btn-danger btn-sm" onclick="delCat('+i+')">删除</button></div>';}).join('');}
 function addCategory(){const n=document.getElementById('newCatName').value;const c=document.getElementById('newCatColor').value;if(!n)return;CATS.push({name:n,color:c});saveCats();}
 function updateCatName(i,v){CATS[i].name=v;saveCats();}
 function updateCatColor(i,v){CATS[i].color=v;saveCats();}
