@@ -1,9 +1,6 @@
 node_modules/
-.wrangler/
-*.log
-.DS_Store
-*.png
-!frontend_v6.png
-!admin_v6.png
-!frontend_v7.png
-!admin_v7.png
+dist/
+__pycache__/
+*.pyc
+*.py
+!scripts/*.py
