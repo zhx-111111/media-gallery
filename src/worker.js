@@ -46,7 +46,7 @@ const errR=(e,st=500)=>new Response('Error: '+e.message,{status:st,headers:{'Con
 const jR=d=>new Response(JSON.stringify(d),{headers:{'Content-Type':'application/json'}});
 const htmlR=h=>new Response(h,{'Content-Type':'text/html;charset=utf-8'});
 const sha256=async t=>{const e=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return[...new Uint8Array(e)].map(b=>b.toString(16).padStart(2,'0')).join('');};
-const esc=s=>!s?'':String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'"':'&quot;',"'":'&#39;'}[ch]));
+const esc=s=>!s?'':String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const slugify=s=>!s?'':String(s).toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g,'-').replace(/^[-]+|[-]+$/g,'').substring(0,80);
 const nowISO=()=>new Date().toISOString();
 const parseBool=v=>v===1||v==='1'||v===true||v==='true';
