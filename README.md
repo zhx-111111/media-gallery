@@ -1,1 +1,88 @@
-IyBNZWRpYSBHYWxsZXJ5Cgrln7rkuo4gQ2xvdWRmbGFyZSBXb3JrZXJzIOeahOi9u+mHj+S9nOWTgembhuermeeCuSDigJQg5Zu+54mHIC8g6KeG6aKRIC8g5paH5a2X77yM6Zu25pyN5Yqh5Zmo5oiQ5pys44CCCgpbRGVtb10oIykgwrcgW+aWh+aho10oIykKCiMjIOKcqCDlip/og70KCi0g8J+WvCDlm77niYcgLyDwn46sIOinhumikSAvIPCfk50g5paH5a2X5LiJ56eN5YaF5a6557G75Z6LCi0g8J+OqCBBcHBsZSDpnZnlpaLpo47orr7orqEgKyDmt7Hluqbmr5vnjrvnkoPmlYjmnpwKLSDwn5SXIOavj+adoeWGheWuueeLrOeriyBVUkzvvIhgL2l0ZW0v6Ieq5a6a5LmJLXNsdWdg77yJCi0g8J+TiiDlpJrlm77nlLvlu4rvvIjnq5blkJHmu5HliqjmtY/op4jvvIkKLSDwn4yZIOaal+iJsuaooeW8j++8iOWFs+mXrSAvIOW8gOWQryAvIOi3n+maj+ezu+e7n++8iQotIPCfk7Eg5a6M5YWo5ZON5bqU5byP77yM56e75Yqo56uv5Y+L5aW9Ci0g8J+UjSBTRU8g5a2X5q61ICsgUlNTICsgU2l0ZW1hcCDoh6rliqjnlJ/miJAKLSDwn5OLIOWkjeWItumTvuaOpeOAgemZhOS7tuS4i+i9veOAgea1j+iniOiuoeaVsAotIPCfjq8g5a6a5pe25Y+R5biDIC8g6L+H5pyf6ZqQ6JePIC8g5p2D6YeN5o6S5bqPIC8g6ZqQ6JeP5LuF6ZO+5o6lCi0g8J+boe+4jyDlkI7lj7Dlr4bnoIHkv53miqQgKyDkvJror53nrqHnkIYKCiMjIPCfmoAg6YOo572y77yINSDmraXvvIzlhajnqIvnvZHpobXmk43kvZzvvIkKCj4g5YmN5o+Q77ya5LiA5LiqIENsb3VkZmxhcmUg6LSm5Y+3ICsg5LiA5Liq5bey5omY566h5YiwIENGIOeahOWfn+WQjQoKIyMjIOesrCAxIOatpe+8mui/nuaOpSBHaXRIdWIg5Yib5bu6IFdvcmtlcgoKMS4g5omT5byAIFtkYXNoLmNsb3VkZmxhcmUuY29tXShodHRwczovL2Rhc2guY2xvdWRmbGFyZS5jb20pIOKGkiAqKldvcmtlcnMgJiBQYWdlcyoqCjIuIOeCuSAqKkNyZWF0ZSoqIOKGkiDpgIkgKipXb3JrZXJzKiog4oaSICoqQ29ubmVjdCB0byBHaXQqKgozLiDmjojmnYMgR2l0SHViIOKGkiDpgInmi6kgYG1lZGlhLWdhbGxlcnlgIOS7k+W6kwo0LiDmnoTlu7rlkb3ku6TnlZnnqbrvvIzkv53lrZjlubbpg6jnvbIKCiMjIyDnrKwgMiDmraXvvJrliJvlu7ogRDEg5pWw5o2u5bqTCgoxLiAqKuWtmOWCqOWSjOaVsOaNruW6kyoqIOKGkiAqKkQxIFNRTCDmlbDmja7lupMqKiDihpIgKirliJvlu7oqKgoyLiDlkI3np7DloasgYG1lZGlhX2dhbGxlcnlfZGJgCjMuIOWIm+W7uuWQjioq5aSN5Yi2IGRhdGFiYXNlX2lkKioKCiMjIyDnrKwgMyDmraXvvJrliJvlu7ogS1Yg5ZG95ZCN56m66Ze0IMOXMgoKMS4gKirlrZjlgqjlkozmlbDmja7lupMqKiDihpIgKipLVioqIOKGkiAqKuWIm+W7uuWRveWQjeepuumXtCoqCjIuIOWQjeensOWhqyBgbWVkaWFfa3ZgIOKGkiDorrDkuIsgSUQKMy4g5YaN5Yib5bu65LiA5Liq77yM5ZCN56ew5aGrIGBtZWRpYV9jYWNoZWAg4oaSIOiusOS4iyBJRAoKIyMjIOesrCA0IOatpe+8mue7keWumui1hOa6kOWIsCBXb3JrZXIKCuWbnuWIsCBXb3JrZXIg4oaSICoqU2V0dGluZ3MqKiDihpIgKipCaW5kaW5ncyoq77yM5re75Yqg5LiJ5Liq57uR5a6a77yaCgp8IOWPmOmHj+WQjeensCB8IOexu+WeiyB8IOmAieaLqSB8CnwtLS0tLS0tLS18LS0tLS0tfC0tLS0tLXwKfCBgZGJgIHwgRDEg5pWw5o2u5bqTIHwgYG1lZGlhX2dhbGxlcnlfZGJgIHwKfCBga3ZgIHwgS1Yg5ZG95ZCN56m66Ze0IHwgYG1lZGlhX2t2YCB8CnwgYGNhY2hlYCB8IEtWIOWRveWQjeepuumXtCB8IGBtZWRpYV9jYWNoZWAgfAoK54S25ZCOICoqU2V0dGluZ3MqKiDihpIgKipWYXJpYWJsZXMqKiDihpIg5re75Yqg546v5aKD5Y+Y6YeP77yaCgp8IOWPmOmHj+WQjSB8IOWAvCB8IOivtOaYjiB8CnwtLS0tLS0tLXwtLS0tLXwtLS0tLS18CnwgYElOSVRfU0VDUkVUYCB8IOS7u+aEj+maj+acuuWtl+espuS4siB8ICoq5b+F5aGrKirvvIzliJ3lp4vljJblr4bpkqUgKyDpppbmrKHlr4bnoIEgfAp8IGBBRE1JTl9QQVNTV09SRGAgfCDkvaDnmoTlkI7lj7Dlr4bnoIEgfCDlj6/pgInvvIzpu5jorqTnrYnkuo4gSU5JVF9TRUNSRVQgfAoKIyMjIOesrCA1IOatpe+8muWIneWni+WMliArIOe7keWumuWfn+WQjQoKMS4g6K6/6ZeuIGBodHRwczovL+S9oOeahHdvcmtlcuWcsOWdgC9hcGkvaW5pdC/kvaDnmoRJTklUX1NFQ1JFVGAKMi4g55yL5YiwIGB7Im9rIjp0cnVlLCJtc2ciOiJpbml0aWFsaXplZCJ9YCDihpIg4pyFIOWujOaIkAozLiAqKlNldHRpbmdzKiog4oaSICoqQ3VzdG9tIERvbWFpbnMqKiDihpIg5re75Yqg5L2g55qE5Z+f5ZCN77yI5aaCIGBnYWxsZXJ5LuS9oOeahOWfn+WQjS5jb21g77yJCjQuIOetiSAxfjUg5YiG6ZKf5Y+YIEFjdGl2ZSDihpIg5rWP6KeI5Zmo5omT5byA5L2g55qE5Z+f5ZCNCgojIyDwn5OdIOWQjuWPsOS9v+eUqAoKLSDorr/pl64gYC9hZG1pbmAg4oaSIOeUqCBgYWRtaW5gICsg5L2g55qE5a+G56CB55m75b2VCi0gKirmiYDmnInlhoXlrrkqKu+8muaWsOW7uiAvIOe8lui+kSAvIOWIoOmZpCAvIOaJuemHj+aTjeS9nAotICoq5LiK5LygKirvvJrkuIrkvKDlm77niYflkozmlofku7bliLAgS1Yg5a2Y5YKoCi0gKirliIbnsbvnrqHnkIYqKu+8mua3u+WKoCAvIOmHjeWRveWQjSAvIOaUueminOiJsiAvIOWIoOWIhuexuwotICoq56uZ54K56K6+572uKirvvJrlk4HniYzlkI3jgIHmoIfpopjjgIFTRU/jgIHmmpfoibLmqKHlvI/jgIFIZXJvIOiDjOaZr+OAgemhteiEmuOAgeWFrOWRiuOAgeWFs+S6jumhteOAgeWvvOiIqumTvuaOpeOAgVJTUy9TaXRlbWFwIOW8gOWFswotICoq5L+u5pS55a+G56CBKirvvJrmlLnlkI7lj7DnmbvlvZXlr4bnoIEKCiMjIPCfj5fvuI8g5oqA5pyv5qCICgp8IOWxgiB8IOaKgOacryB8CnwtLS0tfC0tLS0tLXwKfCDov5DooYzml7YgfCBDbG91ZGZsYXJlIFdvcmtlcnMgfAp8IOaVsOaNruW6kyB8IENsb3VkZmxhcmUgRDEgKFNRTGl0ZSkgfAp8IOaWh+S7tuWtmOWCqCB8IENsb3VkZmxhcmUgS1YgfAp8IOe8k+WtmCB8IENsb3VkZmxhcmUgS1YgfAp8IOWJjeerryB8IOWOn+eUnyBKUyArIOWGheiBlCBDU1PvvIjljZXmlofku7bpg6jnvbLvvIkgfAoKIyMg8J+ThCBMaWNlbnNlCgpNSVQK
+# Media Gallery
+
+基于 Cloudflare Workers 的轻量作品集站点 — 图片 / 视频 / 文字，零服务器成本。
+
+[Demo](#) · [文档](#)
+
+## ✨ 功能
+
+- 🖼 图片 / 🎬 视频 / 📝 文字三种内容类型
+- 🎨 Apple 静奢风设计 + 深度毛玻璃效果
+- 🔗 每条内容独立 URL（`/item/自定义-slug`）
+- 📊 多图画廊（竖向滑动浏览）
+- 🌙 暗色模式（关闭 / 开启 / 跟随系统）
+- 📱 完全响应式，移动端友好
+- 🔍 SEO 字段 + RSS + Sitemap 自动生成
+- 📋 复制链接、附件下载、浏览计数
+- 🎯 定时发布 / 过期隐藏 / 权重排序 / 隐藏仅链接
+- 🛡️ 后台密码保护 + 会话管理
+
+## 🚀 部署（5 步，全程网页操作）
+
+> 前提：一个 Cloudflare 账号 + 一个已托管到 CF 的域名
+
+### 第 1 步：连接 GitHub 创建 Worker
+
+1. 打开 [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages**
+2. 点 **Create** → 选 **Workers** → **Connect to Git**
+3. 授权 GitHub → 选择 `media-gallery` 仓库
+4. 构建命令留空，保存并部署
+
+### 第 2 步：创建 D1 数据库
+
+1. **存储和数据库** → **D1 SQL 数据库** → **创建**
+2. 名称填 `media_gallery_db`
+3. 创建后**复制 database_id**
+
+### 第 3 步：创建 KV 命名空间 ×2
+
+1. **存储和数据库** → **KV** → **创建命名空间**
+2. 名称填 `media_kv` → 记下 ID
+3. 再创建一个，名称填 `media_cache` → 记下 ID
+
+### 第 4 步：绑定资源到 Worker
+
+回到 Worker → **Settings** → **Bindings**，添加三个绑定：
+
+| 变量名称 | 类型 | 选择 |
+|---------|------|------|
+| `db` | D1 数据库 | `media_gallery_db` |
+| `kv` | KV 命名空间 | `media_kv` |
+| `cache` | KV 命名空间 | `media_cache` |
+
+然后 **Settings** → **Variables** → 添加环境变量：
+
+| 变量名 | 值 | 说明 |
+|--------|-----|------|
+| `INIT_SECRET` | 任意随机字符串 | **必填**，初始化密钥 + 首次密码 |
+| `ADMIN_PASSWORD` | 你的后台密码 | 可选，默认等于 INIT_SECRET |
+
+### 第 5 步：初始化 + 绑定域名
+
+1. 访问 `https://你的worker地址/api/init/你的INIT_SECRET`
+2. 看到 `{"ok":true,"msg":"initialized"}` → ✅ 完成
+3. **Settings** → **Custom Domains** → 添加你的域名（如 `gallery.你的域名.com`）
+4. 等 1~5 分钟变 Active → 浏览器打开你的域名
+
+## 📝 后台使用
+
+- 访问 `/admin` → 用 `admin` + 你的密码登录
+- **所有内容**：新建 / 编辑 / 删除 / 批量操作
+- **上传**：上传图片和文件到 KV 存储
+- **分类管理**：添加 / 重命名 / 改颜色 / 删分类
+- **站点设置**：品牌名、标题、SEO、暗色模式、Hero 背景、页脚、公告、关于页、导航链接、RSS/Sitemap 开关
+- **修改密码**：改后台登录密码
+
+## 🏗️ 技术栈
+
+| 层 | 技术 |
+|----|------|
+| 运行时 | Cloudflare Workers |
+| 数据库 | Cloudflare D1 (SQLite) |
+| 文件存储 | Cloudflare KV |
+| 缓存 | Cloudflare KV |
+| 前端 | 原生 JS + 内联 CSS（单文件部署） |
+
+## 📄 License
+
+MIT

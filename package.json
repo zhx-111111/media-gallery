@@ -1,1 +1,11 @@
-ewogICJuYW1lIjogIm1lZGlhLWdhbGxlcnkiLAogICJ2ZXJzaW9uIjogIjIuMC4wIiwKICAiZGVzY3JpcHRpb24iOiAiQ2xvdWRmbGFyZSBXb3JrZXJzIOS4quS6uuS9nOWTgembhiDigJQgNSDmraXpg6jnvbLvvIzpm7bmnI3liqHlmajmiJDmnKwiLAogICJtYWluIjogInNyYy93b3JrZXIuanMiLAogICJzY3JpcHRzIjogewogICAgImRlcGxveSI6ICJ3cmFuZ2xlciBkZXBsb3kiLAogICAgImRldiI6ICJ3cmFuZ2xlciBkZXYiCiAgfSwKICAibGljZW5zZSI6ICJNSVQiCn0K
+{
+  "name": "media-gallery",
+  "version": "2.0.0",
+  "description": "Cloudflare Workers 个人作品集 — 5 步部署，零服务器成本",
+  "main": "src/worker.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "license": "MIT"
+}

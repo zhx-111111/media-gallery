@@ -1,1 +1,26 @@
-Y29uc3QgZnMgPSByZXF1aXJlKCdmcycpOwpjb25zdCBzcmMgPSBmcy5yZWFkRmlsZVN5bmMoJ3NyYy93b3JrZXIuanMnLCAndXRmOCcpOwpsZXQgaSA9IDAsIGNvdW50ID0gMCwgbWF4TGVuID0gMCwgbWF4UG9zID0gMCwgbGFyZ2VUZW1wbGF0ZXMgPSBbXTsKd2hpbGUgKGkgPCBzcmMubGVuZ3RoKSB7CiAgaWYgKHNyY1tpXSA9PT0gJ2AnKSB7CiAgICBsZXQgaiA9IGkgKyAxOwogICAgd2hpbGUgKGogPCBzcmMubGVuZ3RoICYmIHNyY1tqXSAhPT0gJ2AnKSB7CiAgICAgIGlmIChzcmNbal0gPT09ICdcXCcgJiYgaisxIDwgc3JjLmxlbmd0aCkgaisrOwogICAgICBqKys7CiAgICB9CiAgICBjb25zdCBsZW4gPSBqIC0gaSAtIDE7CiAgICBpZiAobGVuID4gMjAwMCkgbGFyZ2VUZW1wbGF0ZXMucHVzaCh7cG9zOiBpLCBsZW4sIHByZXZpZXc6IHNyYy5zdWJzdHJpbmcoaSwgTWF0aC5taW4oaSs2MCwgc3JjLmxlbmd0aCkpfSk7CiAgICBpZiAobGVuID4gbWF4TGVuKSB7IG1heExlbiA9IGxlbjsgbWF4UG9zID0gaTsgfQogICAgY291bnQrKzsKICAgIGkgPSAoaiA8IHNyYy5sZW5ndGgpID8gaiArIDEgOiBzcmMubGVuZ3RoOwogIH0gZWxzZSB7CiAgICBpKys7CiAgfQp9CmNvbnNvbGUubG9nKCdUb3RhbCB0ZW1wbGF0ZSBsaXRlcmFsczonLCBjb3VudCk7CmNvbnNvbGUubG9nKCdNYXggbGVuZ3RoOicsIG1heExlbik7CmNvbnNvbGUubG9nKCdUZW1wbGF0ZXMgPiAyMDAwIGNoYXJzOicsIGxhcmdlVGVtcGxhdGVzLmxlbmd0aCk7CmxhcmdlVGVtcGxhdGVzLmZvckVhY2goKHQsIGlkeCkgPT4gewogIGNvbnNvbGUubG9nKGBcbiMke2lkeCsxfSBhdCAke3QucG9zfSwgbGVuPSR7dC5sZW59YCk7CiAgY29uc29sZS5sb2codC5wcmV2aWV3KTsKfSk7Cg==
+const fs = require('fs');
+const src = fs.readFileSync('src/worker.js', 'utf8');
+let i = 0, count = 0, maxLen = 0, maxPos = 0, largeTemplates = [];
+while (i < src.length) {
+  if (src[i] === '`') {
+    let j = i + 1;
+    while (j < src.length && src[j] !== '`') {
+      if (src[j] === '\\' && j+1 < src.length) j++;
+      j++;
+    }
+    const len = j - i - 1;
+    if (len > 2000) largeTemplates.push({pos: i, len, preview: src.substring(i, Math.min(i+60, src.length))});
+    if (len > maxLen) { maxLen = len; maxPos = i; }
+    count++;
+    i = (j < src.length) ? j + 1 : src.length;
+  } else {
+    i++;
+  }
+}
+console.log('Total template literals:', count);
+console.log('Max length:', maxLen);
+console.log('Templates > 2000 chars:', largeTemplates.length);
+largeTemplates.forEach((t, idx) => {
+  console.log(`\n#${idx+1} at ${t.pos}, len=${t.len}`);
+  console.log(t.preview);
+});

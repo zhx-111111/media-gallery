@@ -1,1 +1,69 @@
-Ly8g5L+u5aSNIHdvcmtlci5qcyDkuK3mi4bliIbohJrmnKzpgKDmiJDnmoTor63ms5XmjZ/lnY8KY29uc3QgZnMgPSByZXF1aXJlKCdmcycpOwpjb25zdCBwYXRoID0gJy9kYXRhL3dvcmtzcGFjZS9tZWRpYS1nYWxsZXJ5L3NyYy93b3JrZXIuanMnOwpsZXQgc3JjID0gZnMucmVhZEZpbGVTeW5jKHBhdGgsICd1dGY4Jyk7CgovLyDilIDilIDilIAg5L+u5aSNIDHvvJrnrKwgNjMxIOihjOmZhOi/keeahOWtpOeriyBgLCBgIOWSjOaWreihjCDilIDilIDilIAKLy8g56ysIDYzMCDooYzmmK8gYGNvbnN0IHN0YXJ0PShwYWdlLTEpKnBzO2AKLy8g56ysIDYzMSDooYzmmK8gYGAsIGAgIO+8iOWeg+Wcvu+8iQovLyDnrKwgNjMyIOihjOaYryBgICAgIGAgIGNvbnN0IHNsaWNlPS4uLmAKLy8g6L+Z5LqbIGAgIGAg5ZKMIGAsIGAg5piv5qih5p2/5a2X56ym5Liy5ouG5YiG55qE5q6L55WZ77yM6ZyA6KaB5Yig5o6JCgovLyDmiornrKwgNjMxLTYzMiDooYznmoTlnoPlnL7mm7/mjaLkuLrlubLlh4Dku6PnoIEKc3JjID0gc3JjLnJlcGxhY2UoCiAgL2NvbnN0IHN0YXJ0PVwocGFnZS0xXClcKnBzO1xuYFxuICAgIGAgIGNvbnN0IHNsaWNlPS8sCiAgYGNvbnN0IHN0YXJ0PShwYWdlLTEpKnBzO1xuICBjb25zdCBzbGljZT1gCik7CgovLyDilIDilIDilIAg5L+u5aSNIDLvvJpuYXZFeHRyYSDpgqPooYznmoQgXS5qb2luKCcnKSDlnoPlnL4g4pSA4pSA4pSACi8vIOWOn+adpe+8mnRyeXsuLi5uYXZFeHRyYSs9YFxuICBdLmpvaW4oJycpPGEgY2xhc3M9Im5hdi1hIi4uLgovLyDmlLnmiJDvvJp0cnl7Li4ubmF2RXh0cmErPWA8YSBjbGFzcz0ibmF2LWEiLi4uCgpzcmMgPSBzcmMucmVwbGFjZSgKICAvbmF2RXh0cmFcKz1gXG4gIFxdXC5qb2luXCgnJ1wpPGEgY2xhc3M9Im5hdi1hIi8sCiAgYG5hdkV4dHJhKz1cYDxhIGNsYXNzPSJuYXYtYSJgCik7CgovLyDilIDilIDilIAg5L+u5aSNIDPvvJrnrKwgMTAyMCDooYzpmYTov5EgcmVuZGVyQWRtaW4g55qEIHJldHVybiDmjZ/lnY8g4pSA4pSA4pSACi8vIOafpeaJviBgXS5qb2luKCcnKTtcbjwvc2NyaXB0PjwvYm9keT48L2h0bWw+YCDmqKHlvI8KLy8g5ZyoIHJlbmRlckFkbWluIOS4re+8jOacgOWQjueahCByZXR1cm4g5bqU6K+l5pivIHJldHVybiBgLi4u5aSn5qih5p2/Li4uYDsKLy8g5L2G6KKr5ouG5Z2P5LqGCgovLyDmib7liLAgcmVuZGVyQWRtaW4g5Ye95pWw6YeM5pyA5ZCO55qE5YaF6IGU6ISa5pys5Yy65Z+fCi8vIOWcqOaWh+S7tuacq+WwvumZhOi/ke+8mjwvc2NyaXB0PjwvYm9keT48L2h0bWw+YDsg5ZCO6Z2i5Y+v6IO96L+Y5pyJ5Z6D5Zy+CgovLyDmo4Dmn6Xmlofku7bmnKvlsL4KY29uc3QgbGluZXMgPSBzcmMuc3BsaXQoJ1xuJyk7CmNvbnNvbGUubG9nKCfmgLvooYzmlbA6JywgbGluZXMubGVuZ3RoKTsKY29uc29sZS5sb2coJ+acgOWQjiA1IOihjDonKTsKbGluZXMuc2xpY2UoLTUpLmZvckVhY2goKGwsIGkpID0+IGNvbnNvbGUubG9nKGAke2xpbmVzLmxlbmd0aCAtIDUgKyBpfTogJHtsfWApKTsKCi8vIOabtOmAmueUqOeahOS/ruWkje+8muaJvuaJgOaciSBgXS5qb2luKCcnKTtgIOWQjue0p+i3nyBIVE1MIOagh+etvueahOaDheWGtQovLyDov5nor7TmmI7mlbDnu4Tmi7zmjqXor63ms5XlkozmqKHmnb/lrZfnrKbkuLLmt7flnKjkuobkuIDotbcKc3JjID0gc3JjLnJlcGxhY2UoCiAgL1xdXC5qb2luXCgnJ1wpOyhccyo8XC9zY3JpcHQ+KS9nLAogIGAkMWAKKTsKCi8vIOS5n+S/ruWkjSBgXS5qb2luKCcnKWAg5ZCO57Sn6LefIEhUTUwg5YaF5a6555qE5oOF5Ya177yI5Zyo5qih5p2/5a2X56ym5Liy5YaF6YOo77yJCi8vIOi/meenjeaDheWGteivtOaYjuaLhuWIhuaXtuaKiuaooeadv+WGheWuueWGmeWIsOS6huaVsOe7hOaLvOaOpeWklumdogpzcmMgPSBzcmMucmVwbGFjZSgKICAvXF1cLmpvaW5cKCcnXCkoXHMqKSg8ZGl2fDxzcGFufDxidXR0b258PGEgfDxzZWN0aW9ufDxtYWlufDxmb290ZXJ8PG5hdiB8PGFydGljbGV8PGlmcmFtZSkvZywKICBgJDEkMmAKKTsKCmNvbnN0IG91dFBhdGggPSBwYXRoLnJlcGxhY2UoJy5qcycsICcuZml4ZWQuanMnKTsKZnMud3JpdGVGaWxlU3luYyhvdXRQYXRoLCBzcmMpOwpjb25zb2xlLmxvZygnXG7kuLTml7bmlofku7blt7LlhpnlhaU6Jywgb3V0UGF0aCk7CgovLyDpqozor4Hor63ms5UKdHJ5IHsKICByZXF1aXJlKCdjaGlsZF9wcm9jZXNzJykuZXhlY1N5bmMoJ25vZGUgLS1jaGVjayAnICsgb3V0UGF0aCwgeyBzdGRpbzogJ3BpcGUnIH0pOwogIGNvbnNvbGUubG9nKCfinIUg6K+t5rOV5qOA5p+l6YCa6L+HJyk7CiAgZnMucmVuYW1lU3luYyhvdXRQYXRoLCBwYXRoKTsKICBjb25zb2xlLmxvZygn4pyFIOW3suimhuebluWOn+aWh+S7ticpOwp9IGNhdGNoIChlKSB7CiAgY29uc29sZS5sb2coJ+KdjCDor63ms5Xku43mnInplJnor686Jyk7CiAgY29uc29sZS5sb2coZS5zdGRvdXQ/LnRvU3RyaW5nKCkgfHwgZS5tZXNzYWdlKTsKICAvLyDkv53nlZnmlofku7bkvpvosIPor5UKfQo=
+// 修复 worker.js 中拆分脚本造成的语法损坏
+const fs = require('fs');
+const path = '/data/workspace/media-gallery/src/worker.js';
+let src = fs.readFileSync(path, 'utf8');
+
+// ─── 修复 1：第 631 行附近的孤立 `, ` 和断行 ───
+// 第 630 行是 `const start=(page-1)*ps;`
+// 第 631 行是 ``, `  （垃圾）
+// 第 632 行是 `    `  const slice=...`
+// 这些 `  ` 和 `, ` 是模板字符串拆分的残留，需要删掉
+
+// 把第 631-632 行的垃圾替换为干净代码
+src = src.replace(
+  /const start=\(page-1\)\*ps;\n`\n    `  const slice=/,
+  `const start=(page-1)*ps;\n  const slice=`
+);
+
+// ─── 修复 2：navExtra 那行的 ].join('') 垃圾 ───
+// 原来：try{...navExtra+=`\n  ].join('')<a class="nav-a"...
+// 改成：try{...navExtra+=`<a class="nav-a"...
+
+src = src.replace(
+  /navExtra\+=`\n  \]\.join\(''\)<a class="nav-a"/,
+  `navExtra+=\`<a class="nav-a"`
+);
+
+// ─── 修复 3：第 1020 行附近 renderAdmin 的 return 损坏 ───
+// 查找 `].join('');\n</script></body></html>` 模式
+// 在 renderAdmin 中，最后的 return 应该是 return `...大模板...`;
+// 但被拆坏了
+
+// 找到 renderAdmin 函数里最后的内联脚本区域
+// 在文件末尾附近：</script></body></html>`; 后面可能还有垃圾
+
+// 检查文件末尾
+const lines = src.split('\n');
+console.log('总行数:', lines.length);
+console.log('最后 5 行:');
+lines.slice(-5).forEach((l, i) => console.log(`${lines.length - 5 + i}: ${l}`));
+
+// 更通用的修复：找所有 `].join('');` 后紧跟 HTML 标签的情况
+// 这说明数组拼接语法和模板字符串混在了一起
+src = src.replace(
+  /\]\.join\(''\);(\s*<\/script>)/g,
+  `$1`
+);
+
+// 也修复 `].join('')` 后紧跟 HTML 内容的情况（在模板字符串内部）
+// 这种情况说明拆分时把模板内容写到了数组拼接外面
+src = src.replace(
+  /\]\.join\(''\)(\s*)(<div|<span|<button|<a |<section|<main|<footer|<nav |<article|<iframe)/g,
+  `$1$2`
+);
+
+const outPath = path.replace('.js', '.fixed.js');
+fs.writeFileSync(outPath, src);
+console.log('\n临时文件已写入:', outPath);
+
+// 验证语法
+try {
+  require('child_process').execSync('node --check ' + outPath, { stdio: 'pipe' });
+  console.log('✅ 语法检查通过');
+  fs.renameSync(outPath, path);
+  console.log('✅ 已覆盖原文件');
+} catch (e) {
+  console.log('❌ 语法仍有错误:');
+  console.log(e.stdout?.toString() || e.message);
+  // 保留文件供调试
+}

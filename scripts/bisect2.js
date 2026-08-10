@@ -1,1 +1,27 @@
-Ly8g5pu06IGq5piO55qE5pa55rOV77ya55SoIGVzYnVpbGQg55qEIHRyYW5zZm9ybSBBUEkg5p2l6I635Y+W57K+56Gu6ZSZ6K+v5L2N572uCmNvbnN0IGVzYnVpbGQgPSByZXF1aXJlKCdlc2J1aWxkJyk7CmNvbnN0IGZzID0gcmVxdWlyZSgnZnMnKTsKCmNvbnN0IGNvZGUgPSBmcy5yZWFkRmlsZVN5bmMoJ3NyYy93b3JrZXIuanMnLCAndXRmOCcpOwoKLy8g55SoIHRyYW5zZm9ybSDogIzkuI3mmK8gYnVuZGxl77yM6L+Z5qC36IO955yL5Yiw5Y6f5aeL6KGM5Y+3CmVzYnVpbGQudHJhbnNmb3JtKGNvZGUsIHsKICBsb2FkZXI6ICdqcycsCiAgZm9ybWF0OiAnZXNtJywKICB0YXJnZXQ6ICdlczIwMjInCn0pLnRoZW4ocmVzdWx0ID0+IHsKICBjb25zb2xlLmxvZygn4pyFIHRyYW5zZm9ybSDpgJrov4cnKTsKfSkuY2F0Y2goZXJyID0+IHsKICBjb25zb2xlLmxvZyhg4p2MIOmUmeivrzogJHtlcnIubWVzc2FnZX1gKTsKICBpZiAoZXJyLmxvY2F0aW9uKSB7CiAgICBjb25zb2xlLmxvZyhgICDmlofku7Y6ICR7ZXJyLmxvY2F0aW9uLmZpbGV9YCk7CiAgICBjb25zb2xlLmxvZyhgICDooYw6ICR7ZXJyLmxvY2F0aW9uLmxpbmV9LCDliJc6ICR7ZXJyLmxvY2F0aW9uLmNvbHVtbn1gKTsKICAgIGNvbnNvbGUubG9nKGAgIOaWh+acrDogJHtlcnIubG9jYXRpb24udGV4dH1gKTsKICAgIC8vIOaYvuekuuS4iuS4i+aWhwogICAgY29uc3QgbGluZXMgPSBjb2RlLnNwbGl0KCdcbicpOwogICAgY29uc3QgbGluZU51bSA9IGVyci5sb2NhdGlvbi5saW5lOwogICAgZm9yIChsZXQgaSA9IE1hdGgubWF4KDAsIGxpbmVOdW0gLSAzKTsgaSA8IE1hdGgubWluKGxpbmVzLmxlbmd0aCwgbGluZU51bSArIDIpOyBpKyspIHsKICAgICAgY29uc29sZS5sb2coYCAgJHtpKzF9OiAke2xpbmVzW2ldLnN1YnN0cmluZygwLCAxMjApfWApOwogICAgfQogIH0KfSk7Cg==
+// 更聪明的方法：用 esbuild 的 transform API 来获取精确错误位置
+const esbuild = require('esbuild');
+const fs = require('fs');
+
+const code = fs.readFileSync('src/worker.js', 'utf8');
+
+// 用 transform 而不是 bundle，这样能看到原始行号
+esbuild.transform(code, {
+  loader: 'js',
+  format: 'esm',
+  target: 'es2022'
+}).then(result => {
+  console.log('✅ transform 通过');
+}).catch(err => {
+  console.log(`❌ 错误: ${err.message}`);
+  if (err.location) {
+    console.log(`  文件: ${err.location.file}`);
+    console.log(`  行: ${err.location.line}, 列: ${err.location.column}`);
+    console.log(`  文本: ${err.location.text}`);
+    // 显示上下文
+    const lines = code.split('\n');
+    const lineNum = err.location.line;
+    for (let i = Math.max(0, lineNum - 3); i < Math.min(lines.length, lineNum + 2); i++) {
+      console.log(`  ${i+1}: ${lines[i].substring(0, 120)}`);
+    }
+  }
+});
