@@ -1,11 +1,16 @@
 {
   "name": "media-gallery",
-  "version": "2.0.0",
-  "description": "Cloudflare Workers 个人作品集 — 5 步部署，零服务器成本",
+  "version": "7.1.0",
+  "description": "Apple-style media gallery on Cloudflare Workers + D1 + KV",
   "main": "src/worker.js",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
+    "build": "echo 'No build step needed — worker.js is plain JS'",
+    "check": "node --check src/worker.js"
   },
-  "license": "MIT"
+  "devDependencies": {
+    "esbuild": "^0.21.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }
