@@ -1,0 +1,13 @@
+{
+  "name": "media-gallery",
+  "version": "39.0.0",
+  "description": "Apple-style media gallery on Cloudflare Workers + D1 + KV (deploy first, bind later)",
+  "scripts": {
+    "build": "esbuild src/worker.js --bundle --format=esm --outfile=dist/worker.js --target=es2020",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.0",
+    "wrangler": "^4.0.0"
+  }
+}

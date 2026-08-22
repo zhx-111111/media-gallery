@@ -1,0 +1,35 @@
+name = "media-gallery"
+main = "src/worker.js"
+compatibility_date = "2026-08-01"
+
+# ========== 绑定说明 ==========
+# 本文件只声明绑定关系，具体 ID 请在 CF Dashboard 配置
+# Workers & Pages → Settings → Variables and Secrets → Add binding
+#
+# 1. D1 数据库绑定：
+#    - Variable type: D1 database
+#    - Variable name: DB
+#    - D1 database: 选你的 media-gallery-db
+#
+# 2. KV 文件存储（图片/视频/附件）：
+#    - Variable type: KV namespace
+#    - Variable name: kv
+#    - Namespace: 选你的文件存储 KV
+#
+# 3. KV Session 缓存：
+#    - Variable type: KV namespace
+#    - Variable name: cache
+#    - Namespace: 选你的缓存 KV
+#
+# 4. 环境变量（Text 类型）：
+#    - INIT_SECRET = zhx20101229
+#    - ADMIN_PASSWORD = admin123
+#    - DEFAULT_BRAND = Gallery
+#    - MAX_FILE_SIZE = 25165824
+#    - PAGE_SIZE = 24
+#    - SESSION_SECRET = gallery-session-secret-2026
+#    - DOMAIN = pluviophile.ccwu.cc
+# ==============================
+
+# Disable telemetry (privacy)
+send_metrics = false
